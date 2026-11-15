@@ -1,0 +1,39 @@
+{
+  "slug": "asmr-tracks",
+  "returning": true,
+  "documents": [
+    {
+      "data": {
+        "title": "雨滴落在玻璃窗",
+        "creatorName": "Checkout Studio",
+        "category": "nature",
+        "description": "細密雨聲與窗面共振，適合放慢呼吸、沉入夜晚。",
+        "status": "approved",
+        "featured": true
+      },
+      "file": ".figma/seed-audio/rain-on-glass.wav"
+    },
+    {
+      "data": {
+        "title": "木質輕敲",
+        "creatorName": "Mori",
+        "category": "tapping",
+        "description": "規律而柔和的木質敲擊，像指尖沿著桌面慢慢散步。",
+        "status": "approved",
+        "featured": true
+      },
+      "file": ".figma/seed-audio/soft-tapping.wav"
+    },
+    {
+      "data": {
+        "title": "深夜棕噪音",
+        "creatorName": "Quiet Lab",
+        "category": "texture",
+        "description": "低頻、厚實的聲音紋理，替注意力留下一個安靜角落。",
+        "status": "approved",
+        "featured": false
+      },
+      "file": ".figma/seed-audio/deep-brown-noise.wav"
+    }
+  ]
+}
