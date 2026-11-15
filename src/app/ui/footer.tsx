@@ -11,9 +11,10 @@ import { CheckoutLogo, Icon } from './shared'
  */
 export function Footer() {
   return (
-    <footer className="relative z-10 bg-[#050812cc] px-5 pt-4 pb-8 backdrop-blur-sm sm:px-8">
-      <div className="mx-auto max-w-7xl border-t border-[#ffffff1f]">
-        <div className="grid gap-12 py-14 md:grid-cols-[1.3fr_1fr_1fr_1fr] md:gap-8 lg:py-16">
+    <footer className="relative z-10 bg-[#050812cc] px-5 pt-4 pb-8 backdrop-blur-sm sm:px-8 xl:px-10">
+      {/* 寬度與左右留白跟 Header 一致，讓 Logo 和連結欄位對齊 Header */}
+      <div className="mx-auto max-w-7xl border-t lg:max-w-none border-[#ffffff1f]">
+        <div className="grid gap-12 py-14 md:flex md:items-start md:justify-between md:gap-8 lg:py-16">
           {/* Logo + 介紹 + IG */}
           <div className="flex flex-col items-start">
             <Link href="/" aria-label="Checkout. 回到首頁">
@@ -32,7 +33,7 @@ export function Footer() {
           </div>
 
           {/* 三個連結欄位 */}
-          <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 md:contents">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 md:flex md:gap-12 lg:gap-20 lg:pr-5 xl:gap-28">
             {siteNav.map((group) => (
               <nav key={group.href} aria-label={group.label}>
                 <Link
