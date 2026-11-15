@@ -1,10 +1,6 @@
 import type { Metadata, Viewport } from 'next'
-import { Footer } from '@/app/ui/footer'
-import { Header } from '@/app/ui/header'
-import { Aurora } from '@/app/ui/aurora-background'
-import { HeadphoneGate } from '@/app/ui/headphone-gate'
-import { PlayerProvider } from '@/app/ui/audio-player'
-import { RevealObserver } from '@/app/ui/reveal-observer'
+import { Aurora, Footer, Header, HeadphoneGate, RevealObserver } from '@/app/ui/site-frame'
+import { PlayerProvider } from '@/app/ui/sound-library'
 import './styles.css'
 
 const title = 'Checkout. — 把世界調小聲一點'

@@ -32,9 +32,17 @@ Traditional Chinese, and ask before making decisions that are hard to undo.
   - `layout.tsx` — shared frame: Header + page body + Footer (+ aurora, headphone gate, player)
   - `styles.css` — design tokens (`@theme`), aurora background, shared component classes
   - `submit-track/route.ts` — public upload endpoint (creates `pending` tracks)
-- `src/app/ui/` — all visible page content and shared UI, kept in one flat folder.
-  - `home-page.tsx`, `about-page.tsx`, `archive-page.tsx`, `experience-page.tsx` — page contents
-  - `header.tsx`, `footer.tsx`, and the other clearly named site components
+- `src/app/ui/` — all visible page content and shared UI, kept in ONE flat folder of a few
+  larger files (the owner prefers few files; add new components to the matching file instead
+  of creating new ones). Each file is split into sections by `// ─── 名稱 ───` comments.
+  - `home-page.tsx` — home (Hero + Gateways)
+  - `about-page.tsx` — about (Mission + Team)
+  - `archive-page.tsx` — archive (Glossary + Timeline + Sociology)
+  - `experience-page.tsx` — experience page shell (server, loads tracks)
+  - `quiz-and-lab.tsx` — client: MatchQuiz + SoundLab (binaural pad, mixer)
+  - `sound-library.tsx` — client: Library + UploadDialog + audio player (PlayerProvider/PlayerBar)
+  - `site-frame.tsx` — client: Header, Footer, Aurora, HeadphoneGate, RevealObserver
+  - `shared.tsx` — server-safe building blocks: Icon, CheckoutLogo, Section/SectionHeading/PageIntro, MiniWave
   - `site-content.ts` — ALL copy and navigation (siteNav drives both Header and Footer). Edit text here.
 - `src/imports/` — external assets supplied by the team (e.g. `checkout-logo.svg`).
   Replace files here instead of editing components; the logo is rendered as a mask so its colour follows text colour.

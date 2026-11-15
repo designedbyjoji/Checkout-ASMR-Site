@@ -1,8 +1,7 @@
 import { getApprovedTracks } from '@/lib/tracks'
 import { Library } from '@/app/ui/sound-library'
-import { MatchQuiz } from '@/app/ui/asmr-match-quiz'
-import { SoundLab } from '@/app/ui/sound-lab'
-import { PageIntro } from '@/app/ui/section-heading'
+import { MatchQuiz, SoundLab } from '@/app/ui/quiz-and-lab'
+import { PageIntro } from '@/app/ui/shared'
 
 /** 感官體驗：最適合你的 ASMR → 聲音實驗室 → 聲音資料庫 */
 export default async function ExperiencePage() {
