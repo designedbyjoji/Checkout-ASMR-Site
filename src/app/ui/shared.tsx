@@ -1,4 +1,6 @@
+import Link from 'next/link'
 import logo from '@/imports/checkout-logo.svg'
+import { siteNav } from './site-content'
 
 /**
  * 共用小零件：圖示、Logo、區塊標題、小波形
@@ -19,6 +21,7 @@ const paths = {
       <path d="m6 13 6 6 6-6" />
     </>
   ),
+  chevron: <path d="m6 9 6 6 6-6" />,
   close: (
     <>
       <path d="m6 6 12 12" />
@@ -121,7 +124,7 @@ export function Icon({ name, className = 'size-5' }: { name: IconName; className
  *
  * 如果你的 SVG 已經包含「Checkout.」字樣，把下面改成 true，避免文字重複。
  */
-const LOGO_HAS_WORDMARK = false
+const LOGO_HAS_WORDMARK = true
 
 export function CheckoutLogo({ className = '', size = 'md' }: { className?: string; size?: 'md' | 'lg' }) {
   const height = size === 'lg' ? 'h-11 sm:h-12' : 'h-8 sm:h-9'
@@ -148,7 +151,7 @@ export function CheckoutLogo({ className = '', size = 'md' }: { className?: stri
       />
       {!LOGO_HAS_WORDMARK && (
         <span
-          className={`font-display font-semibold tracking-[-0.03em] ${
+          className={`font-display font-[600] tracking-[-0.03em] ${
             size === 'lg' ? 'text-[28px] sm:text-[32px]' : 'text-[22px] sm:text-2xl'
           }`}
         >
@@ -161,13 +164,20 @@ export function CheckoutLogo({ className = '', size = 'md' }: { className?: stri
 
 // ─────────────── 區塊標題 SectionHeading／頁面開頭 PageIntro ───────────────
 
-/** 每個段落開頭的標題（編號 ─ 英文小標 ／ 大標題 ／ 導言） */
+/**
+ * 每個段落開頭的標題（編號 ─ 英文小標 ／ 大標題 ／ 導言）
+ * weight：文字粗細，由使用這個標題的頁面自己決定，
+ *     例如 weight={{ index: 700, kicker: 700, title: 900, lead: 700 }}（全站標準，跟「關於我們」一致）
+ *     數字越大越粗：100 最細 · 300 細 · 400 一般 · 500 中 · 600 粗 · 900 最粗
+ */
 export function SectionHeading({
+  weight,
   index,
   kicker,
   title,
   lead,
 }: {
+  weight: { index: number; kicker: number; title: number; lead?: number }
   index: string
   kicker: string
   title: React.ReactNode
@@ -175,15 +185,27 @@ export function SectionHeading({
 }) {
   return (
     <div className="reveal max-w-3xl">
-      <p className="kicker flex items-center gap-3">
-        <span className="font-serif text-base tracking-normal text-aurora-mint/90 normal-case italic">{index}</span>
-        <span className="h-px w-8 bg-white/20" />
+      <p className="kicker flex items-center gap-3" style={{ fontWeight: weight.kicker }}>
+        <span
+          className="font-serif text-base tracking-normal text-[#6ff5c8e6] normal-case italic"
+          style={{ fontWeight: weight.index }}
+        >
+          {index}
+        </span>
+        <span className="h-px w-8 bg-[#ffffff33]" />
         {kicker}
       </p>
-      <h2 className="mt-6 text-[clamp(2rem,5.5vw,3.75rem)] leading-[1.15] font-light tracking-[0.02em] whitespace-pre-line">
+      <h2
+        className="mt-6 text-[clamp(2rem,5.5vw,3.75rem)] leading-[1.15] tracking-[0.02em] whitespace-pre-line"
+        style={{ fontWeight: weight.title }}
+      >
         {title}
       </h2>
-      {lead && <p className="mt-6 max-w-2xl text-base leading-8 text-mist/65 sm:text-lg">{lead}</p>}
+      {lead && (
+        <p className="mt-6 max-w-2xl text-base leading-8 text-[#e6efeea6] sm:text-lg" style={{ fontWeight: weight.lead }}>
+          {lead}
+        </p>
+      )}
     </div>
   )
 }
@@ -205,25 +227,98 @@ export function Section({
   )
 }
 
-/** 內頁最上方的頁面標題 */
-export function PageIntro({ en, title, lead }: { en: string; title: string; lead: string }) {
+/**
+ * 內頁最上方的頁面標題
+ * weight：文字粗細，由使用這個標題的頁面自己決定，
+ *     例如 weight={{ en: 400, title: 700, lead: 700 }}（全站標準，跟「關於我們」一致）
+ */
+export function PageIntro({
+  en,
+  title,
+  lead,
+  weight,
+}: {
+  en: string
+  title: string
+  lead: string
+  weight: { en: number; title: number; lead: number }
+}) {
   return (
     <header className="relative px-5 pt-36 pb-6 sm:px-8 sm:pt-44 lg:pt-52">
       <div className="mx-auto max-w-7xl">
-        <p className="reveal font-serif text-xl text-aurora-mint/90 italic sm:text-2xl">{en}</p>
-        <h1 className="reveal mt-3 text-[clamp(2.8rem,9vw,6rem)] leading-[1.05] font-light tracking-[0.04em]">
+        <p className="reveal font-serif text-xl text-[#6ff5c8e6] italic sm:text-2xl" style={{ fontWeight: weight.en }}>{en}</p>
+        <h1 className="reveal mt-3 text-[clamp(2.8rem,9vw,6rem)] leading-[1.05] tracking-[0.04em]" style={{ fontWeight: weight.title }}>
           {title}
         </h1>
-        <p className="reveal mt-8 max-w-2xl text-base leading-8 text-mist/65 sm:text-lg">{lead}</p>
+        <p className="reveal mt-8 max-w-2xl text-base leading-8 text-[#e6efeea6] sm:text-lg" style={{ fontWeight: weight.lead }}>{lead}</p>
       </div>
     </header>
+  )
+}
+
+// ─────────────── 子分頁外框 Subpage ───────────────
+
+/**
+ * 每個子分頁（例如 /about/team）共用的外框：
+ * 下方＝上一頁／下一頁（子分頁之間主要靠 Header 下拉選單切換）。
+ * 子分頁的名稱與順序都來自 site-content.ts 的 siteNav。
+ */
+export function Subpage({ href, children }: { href: string; children: React.ReactNode }) {
+  const group = siteNav.find((g) => g.children.some((c) => c.href === href))
+  if (!group) return <>{children}</>
+  const pages = group.children
+  const index = pages.findIndex((c) => c.href === href)
+  const current = pages[index]
+  const prev = pages[index - 1]
+  const next = pages[index + 1]
+
+  return (
+    <>
+      {/* 頁面標題只給螢幕閱讀器用；上方留白讓內容不會被固定的 Header 蓋住 */}
+      <h1 className="sr-only">
+        {group.label}：{current.label}
+      </h1>
+      <div className="pt-[calc(3rem+env(safe-area-inset-top))] sm:pt-[calc(5rem+env(safe-area-inset-top))] lg:pt-[calc(3rem+env(safe-area-inset-top))]">
+        {children}
+      </div>
+
+      {(prev || next) && (
+        <nav aria-label="上一頁／下一頁" className="relative px-5 pb-20 sm:px-8 lg:pb-28">
+          <div className="mx-auto flex max-w-7xl flex-col gap-3 border-t border-[#ffffff1a] pt-8 sm:flex-row sm:justify-between">
+            {prev ? (
+              <Link href={prev.href} className="group flex flex-col gap-1 text-[#e6efeeb2] transition-colors hover:text-[#6ff5c8]">
+                <span className="text-xs font-[400] tracking-[0.3em] text-[#e6efee73]">上一頁</span>
+                <span className="inline-flex items-center gap-2 text-lg font-[600] tracking-[0.1em]">
+                  <Icon name="arrow" className="size-4 rotate-180 transition-transform duration-500 group-hover:-translate-x-1" />
+                  {prev.label}
+                </span>
+              </Link>
+            ) : (
+              <span />
+            )}
+            {next && (
+              <Link
+                href={next.href}
+                className="group flex flex-col gap-1 text-[#e6efeeb2] transition-colors hover:text-[#6ff5c8] sm:items-end"
+              >
+                <span className="text-xs font-[400] tracking-[0.3em] text-[#e6efee73]">下一頁</span>
+                <span className="inline-flex items-center gap-2 text-lg font-[600] tracking-[0.1em]">
+                  {next.label}
+                  <Icon name="arrow" className="size-4 transition-transform duration-500 group-hover:translate-x-1" />
+                </span>
+              </Link>
+            )}
+          </div>
+        </nav>
+      )}
+    </>
   )
 }
 
 // ─────────────── 播放中的小波形 MiniWave ───────────────
 
 /** 小小的聲波動畫（播放中會跳動） */
-export function MiniWave({ active, className = 'text-aurora-mint/70' }: { active: boolean; className?: string }) {
+export function MiniWave({ active, className = 'text-[#6ff5c8b2]' }: { active: boolean; className?: string }) {
   const bars = [40, 70, 45, 90, 55, 80, 35, 65, 50, 75, 40, 60]
   return (
     <span className={`flex h-6 items-center gap-[3px] ${className}`} aria-hidden="true">

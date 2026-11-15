@@ -27,9 +27,10 @@ export const site = {
 
 /* ---------------------------------------------------------------
    導覽選單（Header 與 Footer 共用）
-   - label：Header 顯示的文字
+   - label：Header 顯示的文字（滑鼠移上去會出現下拉選單）
    - footerTitle：Footer 欄位標題
-   - children：Footer 欄位底下的連結（# 後面是頁面裡的段落）
+   - href：大分類網址，點了會自動跳到第一個子分頁
+   - children：子分頁，每一個都是獨立的一頁
    --------------------------------------------------------------- */
 
 export const siteNav = [
@@ -38,8 +39,8 @@ export const siteNav = [
     footerTitle: 'ABOUT 關於我們',
     href: '/about',
     children: [
-      { label: '創立初衷', href: '/about#mission' },
-      { label: '團隊成員名單', href: '/about#team' },
+      { label: '創立初衷', href: '/about/mission' },
+      { label: '團隊成員名單', href: '/about/team' },
     ],
   },
   {
@@ -47,9 +48,9 @@ export const siteNav = [
     footerTitle: 'ASMR 檔案',
     href: '/archive',
     children: [
-      { label: '核心用詞解密', href: '/archive#glossary' },
-      { label: '歷史發展', href: '/archive#history' },
-      { label: '社會學洞察', href: '/archive#sociology' },
+      { label: '核心用詞解密', href: '/archive/glossary' },
+      { label: '歷史發展', href: '/archive/history' },
+      { label: '社會學洞察', href: '/archive/sociology' },
     ],
   },
   {
@@ -57,9 +58,9 @@ export const siteNav = [
     footerTitle: '感官體驗',
     href: '/experience',
     children: [
-      { label: '最適合你的 ASMR', href: '/experience#match' },
-      { label: '聲音實驗室', href: '/experience#lab' },
-      { label: '聲音資料庫', href: '/experience#library' },
+      { label: '最適合你的 ASMR', href: '/experience/match' },
+      { label: '聲音實驗室', href: '/experience/lab' },
+      { label: '聲音資料庫', href: '/experience/library' },
     ],
   },
 ] as const
@@ -70,19 +71,19 @@ export const siteNav = [
 
 export const gateways = [
   {
-    href: '/archive',
+    href: '/archive/glossary',
     en: 'Archive',
     title: 'ASMR 檔案',
     body: '酥麻感是什麼？它從哪裡來？為什麼會變成一種全球性的消費文化？',
   },
   {
-    href: '/experience',
+    href: '/experience/match',
     en: 'Experience',
     title: '感官體驗',
     body: '戴上耳機，找出最適合你的觸發音，再到聲音資料庫慢慢待著。',
   },
   {
-    href: '/about',
+    href: '/about/mission',
     en: 'About',
     title: '關於我們',
     body: '一群想讓大家好好休息的學生，和這個網站誕生的理由。',
@@ -104,11 +105,11 @@ export const mission = {
 
 /** 團隊成員：photo 可以留空，會自動顯示名字的第一個字 */
 export const team = [
-  { name: '成員 A', role: '專案統籌・網站設計', note: '負責把想法變成畫面' },
-  { name: '成員 B', role: '內容研究', note: '整理 ASMR 的歷史與研究' },
-  { name: '成員 C', role: '聲音採集', note: '到處錄下好聽的聲音' },
-  { name: '成員 D', role: '社群推廣', note: '讓更多人知道這裡' },
-  { name: '成員 E', role: '文案編輯', note: '把每一句話寫得更溫柔' },
+  { name: '曾柏翰', role: '網站設計', note: '負責把想法變成畫面' },
+  { name: '徐緯軒', role: '內容研究', note: '整理 ASMR 的歷史與研究' },
+  { name: '張瑋庭', role: '聲音採集', note: '到處錄下好聽的聲音' },
+  { name: '陳亮昕', role: '社群推廣', note: '讓更多人知道這裡' },
+  { name: '許采芝', role: '文案編輯', note: '把每一句話寫得更溫柔' },
 ]
 
 /* ---------------------------------------------------------------

@@ -1,0 +1,66 @@
+import Link from 'next/link'
+import { site, siteNav } from './site-content'
+import { CheckoutLogo, Icon } from './shared'
+
+
+/**
+ * ================================================================
+ * Footer（每一頁最下方）
+ * 文字在 site-content.ts 的 site 與 siteNav 修改
+ * ================================================================
+ */
+export function Footer() {
+  return (
+    <footer className="relative z-10 bg-[#050812cc] px-5 pt-4 pb-8 backdrop-blur-sm sm:px-8">
+      <div className="mx-auto max-w-7xl border-t border-[#ffffff1f]">
+        <div className="grid gap-12 py-14 md:grid-cols-[1.3fr_1fr_1fr_1fr] md:gap-8 lg:py-16">
+          {/* Logo + 介紹 + IG */}
+          <div className="flex flex-col items-start">
+            <Link href="/" aria-label="Checkout. 回到首頁">
+              <CheckoutLogo size="lg" />
+            </Link>
+            <p className="mt-6 max-w-[19rem] text-[13px] leading-7 font-[400] tracking-[0.12em] text-[#e6efeeb2]">{site.tagline}</p>
+            <a
+              href={site.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="mt-7 grid size-14 place-items-center rounded-2xl border border-[#ffffff40] text-[#e6efee] transition-colors hover:border-[#6ff5c8] hover:text-[#6ff5c8]"
+            >
+              <Icon name="instagram" className="size-7" />
+            </a>
+          </div>
+
+          {/* 三個連結欄位 */}
+          <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 md:contents">
+            {siteNav.map((group) => (
+              <nav key={group.href} aria-label={group.label}>
+                <Link
+                  href={group.children[0].href}
+                  className="text-sm font-[900] tracking-[0.2em] text-[#6ff5c8] transition-opacity hover:opacity-80"
+                >
+                  {group.footerTitle}
+                </Link>
+                <ul className="mt-6 flex flex-col gap-5">
+                  {group.children.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="text-base font-[700] tracking-[0.18em] text-[#e6efeee6] transition-colors hover:text-[#6ff5c8] sm:text-lg"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            ))}
+          </div>
+        </div>
+
+        <div className="border-t border-[#ffffff1f] pt-6 text-xs font-[400] tracking-wide text-[#e6efee8c]">{site.copyright}</div>
+      </div>
+    </footer>
+  )
+}
+

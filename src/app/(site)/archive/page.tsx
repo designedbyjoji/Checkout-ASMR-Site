@@ -1,5 +1,6 @@
-import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 
-export const metadata: Metadata = { title: 'ASMR 檔案' }
-
-export { default } from '@/app/ui/archive-page'
+/** /archive 本身沒有內容，直接跳到第一個子分頁 */
+export default function Page() {
+  redirect('/archive/glossary')
+}

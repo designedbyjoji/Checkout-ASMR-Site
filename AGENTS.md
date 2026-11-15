@@ -28,25 +28,31 @@ Traditional Chinese, and ask before making decisions that are hard to undo.
 
 - `src/app/(site)/` — public site routes and shared layout. `(site)` is a Next.js route group
   for organizing the site separately from Payload; it does not appear in URLs.
-  - `page.tsx`, `about/page.tsx`, `archive/page.tsx`, `experience/page.tsx` — required route entry files
+  - `page.tsx` (home) and one `page.tsx` per sub-page — required route entry files. Every
+    sub-page is its own URL: `/about/{mission,team}`, `/archive/{glossary,history,sociology}`,
+    `/experience/{match,lab,library}`. `/about`, `/archive`, `/experience` just redirect to
+    their first sub-page. Adding a sub-page = add it to `siteNav`, add a `XxxPage` export in
+    the matching `ui/body/*-page.tsx`, and a `page.tsx` route file that renders it.
   - `layout.tsx` — shared frame: Header + page body + Footer (+ aurora, headphone gate, player)
   - `styles.css` — design tokens (`@theme`), aurora background, shared component classes
   - `submit-track/route.ts` — public upload endpoint (creates `pending` tracks)
-- `src/app/ui/` — all visible page content and shared UI, kept in ONE flat folder of a few
-  larger files (the owner prefers few files; add new components to the matching file instead
-  of creating new ones). Each file is split into sections by `// ─── 名稱 ───` comments.
-  - `home-page.tsx` — home (Hero + Gateways)
-  - `about-page.tsx` — about (Mission + Team)
-  - `archive-page.tsx` — archive (Glossary + Timeline + Sociology)
-  - `experience-page.tsx` — experience page shell (server, loads tracks)
-  - `quiz-and-lab.tsx` — client: MatchQuiz + SoundLab (binaural pad, mixer)
-  - `sound-library.tsx` — client: Library + UploadDialog + audio player (PlayerProvider/PlayerBar)
-  - `site-frame.tsx` — client: Header, Footer, Aurora, HeadphoneGate, RevealObserver
-  - `shared.tsx` — server-safe building blocks: Icon, CheckoutLogo, Section/SectionHeading/PageIntro, MiniWave
+- `src/app/ui/` — all visible UI. The owner thinks of the site as Header + Body + Footer,
+  so the folder mirrors that. Keep files few and clearly named; add new components to the
+  matching file instead of creating new ones. Files are split by `// ─── 名稱 ───` comments.
+  - `header.tsx` — Header (client; desktop shows a hover dropdown of sub-pages). `footer.tsx` — Footer.
+  - `body/` — one file per Header section (holds all its sub-pages): `home-page.tsx`, `about-page.tsx`, `archive-page.tsx`,
+    `experience-page.tsx` (server, loads tracks); the experience page's client parts are
+    `experience-quiz-and-lab.tsx` (MatchQuiz + SoundLab) and `experience-sound-library.tsx`
+    (Library + UploadDialog).
+  - `audio-player.tsx` — site-wide bottom player (PlayerProvider/usePlayer/PlayerBar), used in layout.
+  - `site-effects.tsx` — site-wide client effects: Aurora, HeadphoneGate, RevealObserver.
+  - `shared.tsx` — server-safe building blocks: Icon, CheckoutLogo, Section/SectionHeading/PageIntro,
+    Subpage (sub-page frame: sibling tabs on top, prev/next at the bottom), MiniWave.
   - `site-content.ts` — ALL copy and navigation (siteNav drives both Header and Footer). Edit text here.
 - `src/imports/` — external assets supplied by the team (e.g. `checkout-logo.svg`).
   Replace files here instead of editing components; the logo is rendered as a mask so its colour follows text colour.
-- `src/lib/events.ts` — small cross-section signals (quiz → mixer preset / library filter)
+- Quiz → other sub-pages pass data in the URL: `/experience/lab?mix=<preset name>`,
+  `/experience/library?category=<category>`; shared track links use `/experience/library?track=<id>`.
 - `src/lib/tracks.ts` — cached query for approved tracks
 - `src/lib/synth.ts` — Web Audio synthesis of trigger sounds (rain, tapping, …) and
   the "only one sound at a time" bus (`claimAudio` / `onAudioClaimed`)

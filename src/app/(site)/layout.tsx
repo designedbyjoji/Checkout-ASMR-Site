@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next'
-import { Aurora, Footer, Header, HeadphoneGate, RevealObserver } from '@/app/ui/site-frame'
-import { PlayerProvider } from '@/app/ui/sound-library'
+import { Header } from '@/app/ui/header'
+import { Footer } from '@/app/ui/footer'
+import { Aurora, HeadphoneGate, RevealObserver } from '@/app/ui/site-effects'
+import { PlayerProvider } from '@/app/ui/audio-player'
 import './styles.css'
 
 const title = 'Checkout. — 把世界調小聲一點'
@@ -32,7 +34,7 @@ export const viewport: Viewport = {
 /**
  * ================================================================
  * 全站共用的外框：Header ＋ 中間頁面（Body）＋ Footer
- * 中間頁面內容集中在 src/app/ui/*-page.tsx；page.tsx 是 Next.js 必需的路由入口。
+ * Header＝ui/header.tsx、Footer＝ui/footer.tsx，中間頁面（Body）在 src/app/ui/body/；page.tsx 是 Next.js 必需的路由入口。
  * (site) 是網站專用的內部分類，不會出現在網址中。
  * ================================================================
  */
@@ -43,7 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Chiron Hei HK Text 字體：依常用程度切成小檔，只下載頁面用到的字 */}
         <link rel="stylesheet" href="/fonts/chiron/chiron.css" />
       </head>
-      <body className="min-h-screen bg-night text-mist antialiased">
+      <body className="min-h-screen bg-[#050812] text-[#e6efee] antialiased">
         <Aurora />
         <HeadphoneGate />
         <RevealObserver />

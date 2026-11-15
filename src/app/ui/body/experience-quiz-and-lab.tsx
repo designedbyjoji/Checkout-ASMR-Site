@@ -1,9 +1,9 @@
 'use client'
 
+import Link from 'next/link'
 import { useState, useCallback, useEffect, useRef } from 'react'
-import { requestFilter, requestMix, scrollToId, MIX_EVENT, listen } from '@/lib/events'
-import { categoryLabels, quiz, quizResults, type Category } from './site-content'
-import { Icon, Section, SectionHeading } from './shared'
+import { categoryLabels, quiz, quizResults, type Category } from '../site-content'
+import { Icon, Section, SectionHeading } from '../shared'
 import { claimAudio, getAudioContext, onAudioClaimed, startSound, type SoundHandle, type SoundKind } from '@/lib/synth'
 
 /**
@@ -35,6 +35,7 @@ export function MatchQuiz() {
     <Section id="match">
       <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
         <SectionHeading
+          weight={{ index: 700, kicker: 700, title: 900, lead: 700 }}
           index="01"
           kicker="Find your trigger"
           title={
@@ -54,7 +55,7 @@ export function MatchQuiz() {
               <span
                 key={i}
                 className={`h-1 flex-1 rounded-full transition-colors duration-700 ${
-                  i < step ? 'bg-aurora-mint' : 'bg-white/10'
+                  i < step ? 'bg-[#6ff5c8]' : 'bg-[#ffffff1a]'
                 }`}
               />
             ))}
@@ -62,16 +63,16 @@ export function MatchQuiz() {
 
           {!done ? (
             <div key={step} className="animate-[fade-up_700ms_var(--ease-calm)]">
-              <p className="mt-8 text-xs tracking-[0.3em] text-mist/45">
+              <p className="mt-8 text-xs font-[400] tracking-[0.3em] text-[#e6efee73]">
                 QUESTION {step + 1} / {quiz.length}
               </p>
-              <h3 className="mt-3 text-2xl leading-snug font-light sm:text-3xl">{quiz[step].question}</h3>
+              <h3 className="mt-3 text-2xl leading-snug font-[500] sm:text-3xl">{quiz[step].question}</h3>
               <ul className="mt-8 grid gap-3 sm:grid-cols-2">
                 {quiz[step].options.map((option, i) => (
                   <li key={option.label}>
                     <button
                       onClick={() => choose(i)}
-                      className="w-full rounded-2xl border border-white/12 bg-white/[0.03] px-5 py-4 text-left text-sm leading-6 transition-all duration-300 hover:border-aurora-mint/60 hover:bg-aurora-mint/10 sm:text-base"
+                      className="w-full rounded-2xl border border-[#ffffff1f] bg-[#ffffff08] px-5 py-4 text-left text-sm leading-6 font-[400] transition-all duration-300 hover:border-[#6ff5c899] hover:bg-[#6ff5c81a] sm:text-base"
                     >
                       {option.label}
                     </button>
@@ -81,7 +82,7 @@ export function MatchQuiz() {
               {step > 0 && (
                 <button
                   onClick={() => setStep(step - 1)}
-                  className="mt-6 text-xs tracking-[0.2em] text-mist/45 hover:text-mist"
+                  className="mt-6 text-xs font-[400] tracking-[0.2em] text-[#e6efee73] hover:text-[#e6efee]"
                 >
                   ← 上一題
                 </button>
@@ -90,32 +91,24 @@ export function MatchQuiz() {
           ) : (
             result && (
               <div className="animate-[fade-up_700ms_var(--ease-calm)]">
-                <p className="mt-8 text-xs tracking-[0.3em] text-mist/45">你的觸發類型是</p>
-                <h3 className="aurora-text mt-3 text-4xl font-light sm:text-5xl">{quizResults[result].title}</h3>
-                <p className="mt-6 text-base leading-8 text-mist/70">{quizResults[result].body}</p>
-                <p className="mt-4 rounded-2xl bg-white/[0.04] px-5 py-4 text-sm leading-7 text-mist/65">
+                <p className="mt-8 text-xs font-[400] tracking-[0.3em] text-[#e6efee73]">你的觸發類型是</p>
+                <h3 className="aurora-text mt-3 text-4xl font-[500] sm:text-5xl">{quizResults[result].title}</h3>
+                <p className="mt-6 text-base leading-8 font-[400] text-[#e6efeeb2]">{quizResults[result].body}</p>
+                <p className="mt-4 rounded-2xl bg-[#ffffff0a] px-5 py-4 text-sm leading-7 font-[400] text-[#e6efeea6]">
                   {quizResults[result].tryIt}
                 </p>
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                  <button
-                    className="btn-primary"
-                    onClick={() => {
-                      scrollToId('lab')
-                      window.setTimeout(() => requestMix(quizResults[result].mix), 600)
-                    }}
+                  {/* 跳到其他子分頁，網址參數會告訴那一頁要套用哪個配方／篩選哪個類型 */}
+                  <Link
+                    className="btn-primary font-[600]"
+                    href={`/experience/lab?mix=${encodeURIComponent(quizResults[result].mix)}`}
                   >
                     <Icon name="headphones" className="size-4" /> 用混音台試試
-                  </button>
-                  <button
-                    className="btn-ghost"
-                    onClick={() => {
-                      requestFilter(result)
-                      scrollToId('library')
-                    }}
-                  >
+                  </Link>
+                  <Link className="btn-ghost font-[500]" href={`/experience/library?category=${result}`}>
                     聽「{categoryLabels[result]}」
-                  </button>
-                  <button onClick={restart} className="px-2 py-3 text-xs tracking-[0.2em] text-mist/45 hover:text-mist">
+                  </Link>
+                  <button onClick={restart} className="px-2 py-3 text-xs font-[400] tracking-[0.2em] text-[#e6efee73] hover:text-[#e6efee]">
                     重新測驗
                   </button>
                 </div>
@@ -144,6 +137,7 @@ export function SoundLab() {
   return (
     <Section id="lab">
         <SectionHeading
+          weight={{ index: 700, kicker: 700, title: 900, lead: 700 }}
           index="02"
           kicker="Sound lab"
           title={
@@ -290,13 +284,13 @@ function BinauralPad() {
     <div className="glass reveal flex min-w-0 flex-col rounded-[2rem] p-5 sm:p-8">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="kicker">Binaural · 3D</p>
-          <h3 className="mt-2 text-2xl font-light">聲音繞著你轉</h3>
+          <p className="kicker font-[600]">Binaural · 3D</p>
+          <h3 className="mt-2 text-2xl font-[500]">聲音繞著你轉</h3>
         </div>
         <button
           onClick={() => (playing ? stop() : start())}
           className={`grid size-14 shrink-0 place-items-center rounded-full transition-all duration-500 ${
-            playing ? 'bg-mist text-night' : 'bg-gradient-to-br from-aurora-mint to-aurora-cyan text-night shadow-[0_0_40px_rgb(111_245_200/0.45)]'
+            playing ? 'bg-[#e6efee] text-[#050812]' : 'bg-gradient-to-br from-[#6ff5c8] to-[#4cc9ff] text-[#050812] shadow-[0_0_40px_#6ff5c873]'
           }`}
           aria-label={playing ? '停止' : '播放'}
         >
@@ -324,18 +318,18 @@ function BinauralPad() {
         {[1, 0.66, 0.33].map((s) => (
           <span
             key={s}
-            className="absolute rounded-full border border-dashed border-white/10"
+            className="absolute rounded-full border border-dashed border-[#ffffff1a]"
             style={{ inset: `${((1 - s) / 2) * 100}%` }}
           />
         ))}
-        <span className="absolute top-1 left-1/2 -translate-x-1/2 text-[10px] tracking-[0.3em] text-mist/35">前</span>
-        <span className="absolute bottom-1 left-1/2 -translate-x-1/2 text-[10px] tracking-[0.3em] text-mist/35">後</span>
-        <span className="absolute top-1/2 left-1 -translate-y-1/2 text-[10px] text-mist/35">左</span>
-        <span className="absolute top-1/2 right-1 -translate-y-1/2 text-[10px] text-mist/35">右</span>
+        <span className="absolute top-1 left-1/2 -translate-x-1/2 text-[10px] font-[400] tracking-[0.3em] text-[#e6efee59]">前</span>
+        <span className="absolute bottom-1 left-1/2 -translate-x-1/2 text-[10px] font-[400] tracking-[0.3em] text-[#e6efee59]">後</span>
+        <span className="absolute top-1/2 left-1 -translate-y-1/2 text-[10px] font-[400] text-[#e6efee59]">左</span>
+        <span className="absolute top-1/2 right-1 -translate-y-1/2 text-[10px] font-[400] text-[#e6efee59]">右</span>
 
         {/* 頭（俯視） */}
-        <svg viewBox="0 0 100 100" className="absolute top-1/2 left-1/2 w-[22%] -translate-x-1/2 -translate-y-1/2 text-mist/70" aria-hidden="true">
-          <ellipse cx="50" cy="52" rx="30" ry="34" fill="rgb(255 255 255 / 0.06)" stroke="currentColor" strokeWidth="2" />
+        <svg viewBox="0 0 100 100" className="absolute top-1/2 left-1/2 w-[22%] -translate-x-1/2 -translate-y-1/2 text-[#e6efeeb2]" aria-hidden="true">
+          <ellipse cx="50" cy="52" rx="30" ry="34" fill="#ffffff0f" stroke="currentColor" strokeWidth="2" />
           <path d="M44 19 50 10l6 9" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
           <rect x="12" y="40" width="9" height="22" rx="4.5" fill="currentColor" />
           <rect x="79" y="40" width="9" height="22" rx="4.5" fill="currentColor" />
@@ -346,17 +340,17 @@ function BinauralPad() {
           className="absolute size-11 -translate-x-1/2 -translate-y-1/2 cursor-grab active:cursor-grabbing"
           style={{ left: `${(pos.x + 1) * 50}%`, top: `${(pos.y + 1) * 50}%` }}
         >
-          <span className="absolute inset-0 rounded-full bg-aurora-mint/30 blur-md" />
-          {playing && <span className="animate-ping-soft absolute inset-0 rounded-full border border-aurora-mint/70" />}
-          <span className="absolute inset-[30%] rounded-full bg-white shadow-[0_0_20px_rgb(111_245_200)]" />
+          <span className="absolute inset-0 rounded-full bg-[#6ff5c84c] blur-md" />
+          {playing && <span className="animate-ping-soft absolute inset-0 rounded-full border border-[#6ff5c8b2]" />}
+          <span className="absolute inset-[30%] rounded-full bg-[#ffffff] shadow-[0_0_20px_#6ff5c8]" />
         </span>
       </div>
 
       <div className="mt-auto flex flex-col gap-4">
-        <p className="text-center text-sm text-mist/60" aria-live="polite">
+        <p className="text-center text-sm font-[400] text-[#e6efee99]" aria-live="polite">
           {playing ? (
             <>
-              聲音現在在你的 <span className="text-aurora-mint">{directionLabel(pos.x, pos.y)}</span>
+              聲音現在在你的 <span className="text-[#6ff5c8]">{directionLabel(pos.x, pos.y)}</span>
             </>
           ) : (
             '按下播放，或直接拖動光點'
@@ -364,12 +358,12 @@ function BinauralPad() {
         </p>
         <div className="flex flex-wrap items-center justify-center gap-2">
           {padSounds.map((s) => (
-            <button key={s.kind} className="chip" aria-pressed={kind === s.kind} onClick={() => chooseKind(s.kind)}>
+            <button key={s.kind} className="chip font-[400]" aria-pressed={kind === s.kind} onClick={() => chooseKind(s.kind)}>
               {s.label}
             </button>
           ))}
-          <span className="mx-1 h-5 w-px bg-white/10" />
-          <button className="chip inline-flex items-center gap-1.5" aria-pressed={orbit} onClick={() => setOrbit((v) => !v)}>
+          <span className="mx-1 h-5 w-px bg-[#ffffff1a]" />
+          <button className="chip inline-flex items-center gap-1.5 font-[400]" aria-pressed={orbit} onClick={() => setOrbit((v) => !v)}>
             <Icon name="orbit" className="size-3.5" /> 自動環繞
           </button>
         </div>
@@ -451,15 +445,17 @@ function Mixer() {
 
   useEffect(() => onAudioClaimed('lab-mix', stop), [stop])
 
-  // 測驗結果按「用混音台試試」時，自動套用對應配方
-  useEffect(
-    () =>
-      listen(MIX_EVENT, (name) => {
-        const preset = presets.find((p) => p.name === name)
-        if (preset) applyPresetRef.current(preset.mix)
-      }),
-    [],
-  )
+  // 從測驗結果「用混音台試試」過來時（網址有 ?mix=配方名稱），自動套用對應配方
+  useEffect(() => {
+    const name = new URLSearchParams(window.location.search).get('mix')
+    const preset = presets.find((p) => p.name === name)
+    if (!preset) return
+    const timer = window.setTimeout(() => {
+      applyPresetRef.current(preset.mix)
+      document.getElementById('mixer')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }, 600)
+    return () => window.clearTimeout(timer)
+  }, [])
   useEffect(() => stop, [stop])
 
   function start(nextMix = mix) {
@@ -490,16 +486,16 @@ function Mixer() {
   applyPresetRef.current = applyPreset
 
   return (
-    <div className="glass reveal flex min-w-0 flex-col rounded-[2rem] p-5 sm:p-8">
+    <div id="mixer" className="glass reveal flex min-w-0 flex-col rounded-[2rem] p-5 sm:p-8">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="kicker">Trigger mixer</p>
-          <h3 className="mt-2 text-2xl font-light">調一杯放鬆配方</h3>
+          <p className="kicker font-[600]">Trigger mixer</p>
+          <h3 className="mt-2 text-2xl font-[500]">調一杯放鬆配方</h3>
         </div>
         <button
           onClick={() => (playing ? stop() : start())}
           className={`grid size-14 shrink-0 place-items-center rounded-full transition-all duration-500 ${
-            playing ? 'bg-mist text-night' : 'bg-gradient-to-br from-aurora-violet to-aurora-cyan text-night shadow-[0_0_40px_rgb(160_132_255/0.45)]'
+            playing ? 'bg-[#e6efee] text-[#050812]' : 'bg-gradient-to-br from-[#a084ff] to-[#4cc9ff] text-[#050812] shadow-[0_0_40px_#a084ff73]'
           }`}
           aria-label={playing ? '停止混音' : '播放混音'}
         >
@@ -511,7 +507,7 @@ function Mixer() {
         {presets.map((p) => (
           <button
             key={p.name}
-            className="chip"
+            className="chip font-[400]"
             aria-pressed={playing && JSON.stringify(p.mix) === JSON.stringify(mix)}
             onClick={() => applyPreset(p.mix)}
           >
@@ -526,8 +522,8 @@ function Mixer() {
           return (
             <li key={layer.kind} className="grid grid-cols-[4.5rem_1fr_2.5rem] items-center gap-3 sm:grid-cols-[6rem_1fr_2.5rem]">
               <label htmlFor={`mix-${layer.kind}`} className="flex flex-col">
-                <span className="text-sm">{layer.label}</span>
-                <span className="font-serif text-xs text-mist/40 italic">{layer.hint}</span>
+                <span className="text-sm font-[400]">{layer.label}</span>
+                <span className="font-serif text-xs font-[400] text-[#e6efee66] italic">{layer.hint}</span>
               </label>
               <input
                 id={`mix-${layer.kind}`}
@@ -539,13 +535,13 @@ function Mixer() {
                 className="slider"
                 style={{ '--fill': `${value}%` } as React.CSSProperties}
               />
-              <span className="text-right text-xs tabular-nums text-mist/45">{value}</span>
+              <span className="text-right text-xs font-[400] text-[#e6efee73] tabular-nums">{value}</span>
             </li>
           )
         })}
       </ul>
 
-      <p className="mt-8 flex items-center gap-2 text-xs leading-6 text-mist/40">
+      <p className="mt-8 flex items-center gap-2 text-xs leading-6 font-[400] text-[#e6efee66]">
         <Icon name="volume" className="size-4 shrink-0" />
         建議音量先調小，再慢慢加大。
       </p>

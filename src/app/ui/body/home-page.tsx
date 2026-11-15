@@ -2,8 +2,8 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { Icon, Section, SectionHeading } from './shared'
-import { gateways } from './site-content'
+import { Icon, Section, SectionHeading } from '../shared'
+import { gateways } from '../site-content'
 
 /**
  * 首頁（網址 /）：主視覺 Hero ＋ 三個入口卡片
@@ -16,10 +16,10 @@ import { gateways } from './site-content'
  */
 export default function HomePage() {
   return (
-    <>
+    <div className="page-home contents">
       <Hero />
       <Gateways />
-    </>
+    </div>
   )
 }
 
@@ -46,39 +46,39 @@ export function Hero() {
           style={{
             transform: `scale(${inhale ? 1.06 : 0.82})`,
             background:
-              'radial-gradient(circle at 35% 30%, rgb(111 245 200 / 0.35), rgb(76 201 255 / 0.18) 40%, rgb(160 132 255 / 0.12) 65%, transparent 72%)',
+              'radial-gradient(circle at 35% 30%, #6ff5c859, #4cc9ff2e 40%, #a084ff1f 65%, transparent 72%)',
             filter: 'blur(8px)',
           }}
         />
         <div
-          className="absolute inset-[18%] rounded-full border border-white/10 transition-transform duration-[4000ms] ease-in-out"
+          className="absolute inset-[18%] rounded-full border border-[#ffffff1a] transition-transform duration-[4000ms] ease-in-out"
           style={{ transform: `scale(${inhale ? 1.08 : 0.9})` }}
         />
       </div>
 
       <div className="relative z-10 mx-auto max-w-4xl text-center">
-        <p className="kicker reveal !tracking-[0.18em] sm:!tracking-[0.28em]">Autonomous Sensory Meridian Response</p>
-        <h1 className="reveal mt-7 text-[clamp(2.6rem,9vw,6.2rem)] leading-[1.08] font-light tracking-[0.04em]">
+        <p className="kicker reveal font-[600] !tracking-[0.18em] sm:!tracking-[0.28em]">Autonomous Sensory Meridian Response</p>
+        <h1 className="reveal mt-7 text-[clamp(2.6rem,9vw,6.2rem)] leading-[1.08] font-[700] tracking-[0.04em]">
           把世界
           <br className="sm:hidden" />
-          <span className="aurora-text font-normal">調小聲</span>一點
+          <span className="aurora-text font-[700]">調小聲</span>一點
         </h1>
-        <p className="reveal mx-auto mt-8 max-w-xl text-[clamp(1rem,2.4vw,1.25rem)] leading-relaxed text-mist/70">
+        <p className="reveal mx-auto mt-8 max-w-xl text-[clamp(1rem,2.4vw,1.25rem)] leading-relaxed font-[700] text-[#e6efeeb2]">
           這裡沒有演算法，只有頭皮發麻。
           <br />
           一個收藏、理解與分享 ASMR 的聲音角落。
         </p>
 
         <div className="reveal mt-12 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link href="/experience#match" className="btn-primary w-full max-w-64 sm:w-auto">
+          <Link href="/experience/match" className="btn-primary w-full max-w-64 font-[600] sm:w-auto">
             <Icon name="headphones" className="size-4" /> 開始體驗
           </Link>
-          <Link href="/archive" className="btn-ghost w-full max-w-64 sm:w-auto">
+          <Link href="/archive/glossary" className="btn-ghost w-full max-w-64 font-[500] sm:w-auto">
             什麼是 ASMR？
           </Link>
         </div>
 
-        <p className="mt-14 text-xs tracking-[0.4em] text-mist/40" aria-live="off">
+        <p className="mt-14 text-xs font-[400] tracking-[0.4em] text-[#e6efee66]" aria-live="off">
           <span className="transition-opacity duration-700">{inhale ? '吸 氣 ⋯' : '吐 氣 ⋯'}</span>
         </p>
       </div>
@@ -86,7 +86,7 @@ export function Hero() {
       <a
         href="#start"
         aria-label="往下捲動"
-        className="absolute bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-1/2 grid size-10 -translate-x-1/2 place-items-center rounded-full border border-white/15 text-mist/60 transition-colors hover:text-mist"
+        className="absolute bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-1/2 grid size-10 -translate-x-1/2 place-items-center rounded-full border border-[#ffffff26] text-[#e6efee99] transition-colors hover:text-[#e6efee]"
       >
         <Icon name="down" className="size-4" />
       </a>
@@ -100,7 +100,7 @@ export function Hero() {
 export function Gateways() {
   return (
     <Section id="start">
-      <SectionHeading index="—" kicker="Where to start" title="今天想從哪裡開始？" />
+      <SectionHeading weight={{ index: 700, kicker: 700, title: 900 }} index="—" kicker="Where to start" title="今天想從哪裡開始？" />
       <div className="mt-14 grid gap-4 md:grid-cols-3 lg:mt-20">
         {gateways.map((g, i) => (
           <Link
@@ -109,10 +109,10 @@ export function Gateways() {
             className="glass reveal group flex min-h-56 flex-col rounded-3xl p-7 transition-transform duration-700 hover:-translate-y-1 sm:p-8"
             style={{ transitionDelay: `${i * 90}ms` }}
           >
-            <p className="font-serif text-xl text-aurora-mint/90 italic">{g.en}</p>
-            <h3 className="mt-2 text-2xl font-light tracking-wide">{g.title}</h3>
-            <p className="mt-4 text-sm leading-7 text-mist/60">{g.body}</p>
-            <span className="mt-auto inline-flex items-center gap-2 pt-8 text-sm text-mist/70 transition-colors group-hover:text-aurora-mint">
+            <p className="font-serif text-xl font-[400] text-[#6ff5c8e6] italic">{g.en}</p>
+            <h3 className="mt-2 text-2xl font-[500] tracking-wide">{g.title}</h3>
+            <p className="mt-4 text-sm leading-7 font-[400] text-[#e6efee99]">{g.body}</p>
+            <span className="mt-auto inline-flex items-center gap-2 pt-8 text-sm font-[400] text-[#e6efeeb2] transition-colors group-hover:text-[#6ff5c8]">
               前往 <Icon name="arrow" className="size-4 transition-transform duration-500 group-hover:translate-x-1" />
             </span>
           </Link>
