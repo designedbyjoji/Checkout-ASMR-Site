@@ -26,18 +26,16 @@ Traditional Chinese, and ask before making decisions that are hard to undo.
 
 ## Structure
 
-- `src/app/(frontend)/` — public site
+- `src/app/(site)/` — public site routes and shared layout. `(site)` is a Next.js route group
+  for organizing the site separately from Payload; it does not appear in URLs.
+  - `page.tsx`, `about/page.tsx`, `archive/page.tsx`, `experience/page.tsx` — required route entry files
   - `layout.tsx` — shared frame: Header + page body + Footer (+ aurora, headphone gate, player)
-  - Page bodies (one file each, they only list sections in order):
-    `page.tsx` (home), `about/page.tsx`, `archive/page.tsx`, `experience/page.tsx`
-  - `content.ts` — ALL copy and navigation (siteNav drives both Header and Footer). Edit text here.
   - `styles.css` — design tokens (`@theme`), aurora background, shared component classes
-  - `components/Header.tsx`, `components/Footer.tsx` — site header / footer
-  - `components/sections/` — page sections (Hero, Gateways, About, Glossary, Timeline,
-    Sociology, MatchQuiz, SoundLab, Library)
-  - `components/site/` — site-wide behaviour (Aurora, HeadphoneGate, Player provider, RevealObserver, UploadDialog)
-  - `components/ui/` — small shared pieces (Icon, CheckoutLogo, SectionHeading, MiniWave)
   - `submit-track/route.ts` — public upload endpoint (creates `pending` tracks)
+- `src/app/ui/` — all visible page content and shared UI, kept in one flat folder.
+  - `home-page.tsx`, `about-page.tsx`, `archive-page.tsx`, `experience-page.tsx` — page contents
+  - `header.tsx`, `footer.tsx`, and the other clearly named site components
+  - `site-content.ts` — ALL copy and navigation (siteNav drives both Header and Footer). Edit text here.
 - `src/imports/` — external assets supplied by the team (e.g. `checkout-logo.svg`).
   Replace files here instead of editing components; the logo is rendered as a mask so its colour follows text colour.
 - `src/lib/events.ts` — small cross-section signals (quiz → mixer preset / library filter)

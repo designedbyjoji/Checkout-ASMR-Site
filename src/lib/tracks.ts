@@ -1,7 +1,7 @@
 import config from '@payload-config'
 import { unstable_cache } from 'next/cache'
 import { getPayload } from 'payload'
-import type { Track } from '@/app/(frontend)/content'
+import type { Track } from '@/app/ui/site-content'
 
 /** 讀取「已通過審核」的聲音；後台修改時會自動更新 */
 export const getApprovedTracks = unstable_cache(
