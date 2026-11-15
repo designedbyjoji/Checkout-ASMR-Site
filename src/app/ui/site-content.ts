@@ -1,3 +1,10 @@
+import type { StaticImageData } from 'next/image'
+import avatar1 from '@/imports/Website Avatar 1.svg'
+import avatar2 from '@/imports/Website Avatar 2.svg'
+import avatar3 from '@/imports/Website Avatar 3.svg'
+import avatar4 from '@/imports/Website Avatar 4.svg'
+import avatar5 from '@/imports/Website Avatar 5.svg'
+
 /**
  * ================================================================
  * 網站文案集中放在這裡：改字只要改這個檔案，不用動到版面程式。
@@ -86,7 +93,7 @@ export const gateways = [
     href: '/about/mission',
     en: 'About',
     title: '關於我們',
-    body: '一群想讓大家好好休息的學生，和這個網站誕生的理由。',
+    body: '一群想讓大家好好休息的大學生，和這個網站誕生的理由。',
   },
 ]
 
@@ -103,13 +110,16 @@ export const mission = {
   ],
 }
 
-/** 團隊成員：photo 可以留空，會自動顯示名字的第一個字 */
-export const team = [
-  { name: '曾柏翰', role: '網站設計', note: '負責把想法變成畫面' },
-  { name: '徐緯軒', role: '內容研究', note: '整理 ASMR 的歷史與研究' },
-  { name: '張瑋庭', role: '聲音採集', note: '到處錄下好聽的聲音' },
-  { name: '陳亮昕', role: '社群推廣', note: '讓更多人知道這裡' },
-  { name: '許采芝', role: '文案編輯', note: '把每一句話寫得更溫柔' },
+/**
+ * 團隊成員：photo 是頭像圖片（放在 src/imports/），換掉同名檔案就會更新。
+ * photo 可以留空（刪掉那一項），會自動改成顯示名字的第一個字。
+ */
+export const team: { name: string; role: string; note: string; photo?: StaticImageData }[] = [
+  { name: '曾柏翰', role: '網站設計與架設', note: '負責把想法變成畫面', photo: avatar1 },
+  { name: '徐緯軒', role: '網站設計與架設', note: '負責把想法變成畫面', photo: avatar2 },
+  { name: '張瑋庭', role: '聲音採集', note: '到處錄下好聽的聲音', photo: avatar3 },
+  { name: '陳亮昕', role: '社群推廣', note: '讓更多人知道這裡', photo: avatar4 },
+  { name: '許采芝', role: '文案編輯', note: '把每一句話寫得更溫柔', photo: avatar5 },
 ]
 
 /* ---------------------------------------------------------------

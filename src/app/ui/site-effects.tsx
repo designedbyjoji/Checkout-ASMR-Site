@@ -127,10 +127,10 @@ export function HeadphoneGate() {
         <EarDot active={step === 'right'} label="R" />
       </div>
 
-      <p className="kicker font-[600]">Please put on your headphones</p>
+      <p className="kicker font-[600]">Put on your headphones</p>
       <h1
         id="gate-title"
-        className="mt-5 text-[clamp(2.2rem,8vw,4rem)] font-[300] leading-tight tracking-[0.18em]"
+        className="mt-5 text-[clamp(2.2rem,8vw,4rem)] font-[700] leading-tight tracking-[0.18em]"
       >
         請戴上耳機
       </h1>

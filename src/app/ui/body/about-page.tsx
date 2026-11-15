@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { Section, SectionHeading, Subpage } from '../shared'
 import { mission, team } from '../site-content'
 
@@ -75,16 +76,25 @@ export function Team() {
             className="glass reveal flex flex-col items-center rounded-3xl px-4 py-8 text-center sm:px-6"
             style={{ transitionDelay: `${i * 70}ms` }}
           >
-            <span
-              aria-hidden="true"
-              className={`grid size-16 place-items-center rounded-full bg-gradient-to-br text-xl font-[500] text-[#050812] sm:size-20 sm:text-2xl ${
-                gradients[i % gradients.length]
-              }`}
-            >
-              {member.name.replace(/^成員\s*/, '').slice(0, 1)}
-            </span>
-            <p className="mt-5 text-base font-[500]">{member.name}</p>
-            <p className="mt-1 text-xs font-[400] tracking-wide text-[#6ff5c8cc]">{member.role}</p>
+            {member.photo ? (
+              <Image
+                src={member.photo}
+                alt=""
+                aria-hidden="true"
+                className="size-16 rounded-full object-cover sm:size-20"
+              />
+            ) : (
+              <span
+                aria-hidden="true"
+                className={`grid size-16 place-items-center rounded-full bg-gradient-to-br text-xl font-[500] text-[#050812] sm:size-20 sm:text-2xl ${
+                  gradients[i % gradients.length]
+                }`}
+              >
+                {member.name.replace(/^成員\s*/, '').slice(0, 1)}
+              </span>
+            )}
+            <p className="mt-5 text-base font-[900]">{member.name}</p>
+            <p className="mt-1 text-xs font-[700] tracking-wide text-[#6ff5c8cc]">{member.role}</p>
             <p className="mt-3 text-xs leading-5 font-[400] text-[#e6efee80]">{member.note}</p>
           </li>
         ))}

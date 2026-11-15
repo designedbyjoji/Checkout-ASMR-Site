@@ -50,14 +50,10 @@ export function Hero() {
             filter: 'blur(8px)',
           }}
         />
-        <div
-          className="absolute inset-[18%] rounded-full border border-[#ffffff1a] transition-transform duration-[4000ms] ease-in-out"
-          style={{ transform: `scale(${inhale ? 1.08 : 0.9})` }}
-        />
       </div>
 
       <div className="relative z-10 mx-auto max-w-4xl text-center">
-        <p className="kicker reveal font-[600] !tracking-[0.18em] sm:!tracking-[0.28em]">Autonomous Sensory Meridian Response</p>
+        <p className="kicker reveal font-[700] !tracking-[0.18em] sm:!tracking-[0.28em]">Autonomous Sensory Meridian Response, ASMR</p>
         <h1 className="reveal mt-7 text-[clamp(2.6rem,9vw,6.2rem)] leading-[1.08] font-[700] tracking-[0.04em]">
           把世界
           <br className="sm:hidden" />
@@ -78,7 +74,7 @@ export function Hero() {
           </Link>
         </div>
 
-        <p className="mt-14 text-xs font-[400] tracking-[0.4em] text-[#e6efee66]" aria-live="off">
+        <p className="mt-14 text-xs font-[700] tracking-[0.4em] text-[#e6efee66]" aria-live="off">
           <span className="transition-opacity duration-700">{inhale ? '吸 氣 ⋯' : '吐 氣 ⋯'}</span>
         </p>
       </div>
@@ -110,9 +106,9 @@ export function Gateways() {
             style={{ transitionDelay: `${i * 90}ms` }}
           >
             <p className="font-serif text-xl font-[400] text-[#6ff5c8e6] italic">{g.en}</p>
-            <h3 className="mt-2 text-2xl font-[500] tracking-wide">{g.title}</h3>
+            <h3 className="mt-2 text-2xl font-[700] tracking-wide">{g.title}</h3>
             <p className="mt-4 text-sm leading-7 font-[400] text-[#e6efee99]">{g.body}</p>
-            <span className="mt-auto inline-flex items-center gap-2 pt-8 text-sm font-[400] text-[#e6efeeb2] transition-colors group-hover:text-[#6ff5c8]">
+            <span className="mt-auto inline-flex items-center gap-2 pt-8 text-sm font-[700] text-[#e6efeeb2] transition-colors group-hover:text-[#6ff5c8]">
               前往 <Icon name="arrow" className="size-4 transition-transform duration-500 group-hover:translate-x-1" />
             </span>
           </Link>
