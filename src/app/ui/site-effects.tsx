@@ -210,3 +210,24 @@ export function RevealObserver() {
 
   return null
 }
+
+// ─────────────── 換頁回到頂端 ScrollToTop ───────────────
+
+/** 每次切換到另一個頁面時，立刻回到最上面（看得到 Header）。 */
+export function ScrollToTop() {
+  const pathname = usePathname()
+  const first = useRef(true)
+
+  useEffect(() => {
+    // 第一次進站交給瀏覽器處理；之後每次換頁都回到頂端
+    if (first.current) {
+      first.current = false
+      return
+    }
+    // 網址有 #錨點 時，讓瀏覽器捲到那個位置
+    if (window.location.hash) return
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  }, [pathname])
+
+  return null
+}

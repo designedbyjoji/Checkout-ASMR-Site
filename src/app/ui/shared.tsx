@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import logo from '@/imports/checkout-logo.svg'
+import threadsLogo from '@/imports/threads-logo.svg'
 import { siteNav } from './site-content'
 
 /**
@@ -125,6 +126,26 @@ export function Icon({ name, className = 'size-5' }: { name: IconName; className
  * 如果你的 SVG 已經包含「Checkout.」字樣，把下面改成 true，避免文字重複。
  */
 const LOGO_HAS_WORDMARK = true
+
+/** Threads Logo（檔案在 src/imports/threads-logo.svg），顏色會跟著文字顏色走 */
+export function ThreadsLogo({ className = 'size-6' }: { className?: string }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`block bg-current ${className}`}
+      style={{
+        WebkitMaskImage: `url(${threadsLogo.src})`,
+        maskImage: `url(${threadsLogo.src})`,
+        WebkitMaskSize: 'contain',
+        maskSize: 'contain',
+        WebkitMaskRepeat: 'no-repeat',
+        maskRepeat: 'no-repeat',
+        WebkitMaskPosition: 'center',
+        maskPosition: 'center',
+      }}
+    />
+  )
+}
 
 export function CheckoutLogo({ className = '', size = 'md' }: { className?: string; size?: 'md' | 'lg' }) {
   const height = size === 'lg' ? 'h-11 sm:h-12' : 'h-8 sm:h-9'

@@ -28,7 +28,8 @@ export type Track = {
 export const site = {
   name: 'Checkout.',
   tagline: '國立臺灣大學圖書資訊學系 ASMR 推廣團體。致力於讓為生活而奔波的人們好好休息放鬆。',
-  instagram: 'https://www.instagram.com/', // TODO：換成你們的 IG 帳號網址
+  instagram: 'https://www.instagram.com/checkout_asmr/',
+  threads: 'https://www.threads.com/@checkout_asmr',
   copyright: '© 2026 Checkout. All rights reserved.',
 }
 

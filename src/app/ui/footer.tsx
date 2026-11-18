@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { site, siteNav } from './site-content'
-import { CheckoutLogo, Icon } from './shared'
+import { CheckoutLogo, Icon, ThreadsLogo } from './shared'
 
 
 /**
@@ -15,21 +15,29 @@ export function Footer() {
       {/* 寬度與左右留白跟 Header 一致，讓 Logo 和連結欄位對齊 Header */}
       <div className="mx-auto max-w-7xl border-t lg:max-w-none border-[#ffffff1f]">
         <div className="grid gap-12 py-14 md:flex md:items-start md:justify-between md:gap-8 lg:py-16">
-          {/* Logo + 介紹 + IG */}
+          {/* Logo + 介紹 + 社群按鈕（IG、Threads） */}
           <div className="flex flex-col items-start">
             <Link href="/" aria-label="Checkout. 回到首頁">
               <CheckoutLogo size="lg" />
             </Link>
             <p className="mt-6 max-w-[19rem] text-[13px] leading-7 font-[400] tracking-[0.12em] text-[#e6efeeb2]">{site.tagline}</p>
-            <a
-              href={site.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-              className="mt-7 grid size-14 place-items-center rounded-2xl border border-[#ffffff40] text-[#e6efee] transition-colors hover:border-[#6ff5c8] hover:text-[#6ff5c8]"
-            >
-              <Icon name="instagram" className="size-7" />
-            </a>
+            <div className="mt-7 flex gap-3">
+              {[
+                { href: site.instagram, label: 'Instagram', icon: <Icon name="instagram" className="size-7" /> },
+                { href: site.threads, label: 'Threads', icon: <ThreadsLogo className="size-6" /> },
+              ].map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  className="grid size-14 place-items-center rounded-2xl border border-[#ffffff40] text-[#e6efee] transition-colors hover:border-[#6ff5c8] hover:text-[#6ff5c8]"
+                >
+                  {social.icon}
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* 三個連結欄位 */}
