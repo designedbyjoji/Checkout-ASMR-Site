@@ -404,6 +404,81 @@
   animation: ping-soft 2.4s var(--ease-calm) infinite;
 }
 
+/* ================================================================
+   ASMR 類型圖示（/archive/types）：慢速、柔和的循環動畫
+   ================================================================ */
+.type-icon * {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+/* 口腔音：氣音一圈一圈往外飄 */
+.type-icon .breath {
+  animation: type-breath 3s ease-in-out infinite;
+}
+.type-icon .breath-2 { animation-delay: 0.35s; }
+.type-icon .breath-3 { animation-delay: 0.7s; }
+@keyframes type-breath {
+  0%, 100% { opacity: 0.2; }
+  40% { opacity: 1; }
+}
+/* 純物件聲：指尖輕敲，敲到時泛起漣漪 */
+.type-icon .finger {
+  animation: type-tap 2.6s var(--ease-calm) infinite;
+}
+@keyframes type-tap {
+  0%, 40%, 100% { transform: translateY(0); }
+  52% { transform: translateY(7px); }
+  70% { transform: translateY(0); }
+}
+.type-icon .ripple {
+  opacity: 0.35;
+  animation: type-ripple 2.6s ease-out infinite;
+}
+.type-icon .ripple-l { transform-origin: right bottom; }
+.type-icon .ripple-r { transform-origin: left bottom; }
+@keyframes type-ripple {
+  0%, 48% { opacity: 0; transform: scale(0.6); }
+  56% { opacity: 1; transform: scale(1); }
+  90%, 100% { opacity: 0; transform: scale(1.25); }
+}
+/* 大自然：雨滴輪流落下 */
+.type-icon .drop {
+  animation: type-drop 2.2s ease-in infinite;
+}
+.type-icon .drop-2 { animation-delay: 0.75s; }
+.type-icon .drop-3 { animation-delay: 1.45s; }
+@keyframes type-drop {
+  0% { opacity: 0; transform: translateY(-3px); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(7px); }
+}
+/* 角色扮演：對話框裡的小點輪流亮起 */
+.type-icon .dot {
+  animation: type-dot 2.4s ease-in-out infinite;
+}
+.type-icon .dot-2 { animation-delay: 0.3s; }
+.type-icon .dot-3 { animation-delay: 0.6s; }
+@keyframes type-dot {
+  0%, 60%, 100% { opacity: 0.3; }
+  25% { opacity: 1; }
+}
+/* 視覺型：眼睛慢慢左右看，旁邊的光點閃爍 */
+.type-icon .iris {
+  animation: type-look 7s ease-in-out infinite;
+}
+@keyframes type-look {
+  0%, 15%, 100% { transform: translateX(0); }
+  35%, 45% { transform: translateX(-4px); }
+  65%, 75% { transform: translateX(4px); }
+}
+.type-icon .sparkle {
+  animation: type-sparkle 3.5s ease-in-out infinite;
+}
+@keyframes type-sparkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
 /* 捲動進場 */
 .reveal {
   opacity: 0;
@@ -429,6 +504,10 @@
   .reveal {
     opacity: 1;
     transform: none;
+  }
+  /* 類型圖示直接停在靜止畫面 */
+  .type-icon * {
+    animation: none !important;
   }
 }
 

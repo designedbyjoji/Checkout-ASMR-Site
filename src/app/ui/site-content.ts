@@ -57,6 +57,7 @@ export const siteNav = [
     href: '/archive',
     children: [
       { label: '核心用詞解密', href: '/archive/glossary' },
+      { label: 'ASMR 類型', href: '/archive/types' },
       { label: '歷史發展', href: '/archive/history' },
       { label: '社會學洞察', href: '/archive/sociology' },
     ],
@@ -139,26 +140,65 @@ export const glossary = [
   {
     term: 'Tingles',
     zh: '酥麻感',
-    description: '從頭皮延伸到後頸、肩膀的細微酥麻，是多數人形容 ASMR 時第一個想到的詞。',
+    description: 'ASMR 的核心體驗：通常從頭皮開始，延伸到脖子、肩膀和脊椎的酥麻或放鬆感。',
   },
   {
     term: 'Trigger',
     zh: '觸發音',
-    description: '會引起放鬆或酥麻感的聲音與情境，例如耳語、輕敲、翻書。每個人的觸發點都不同。',
+    description: '引發酥麻感的特定聲音、畫面或情境，例如耳語、輕敲、翻書。每個人的觸發點都不同。',
   },
   {
-    term: 'Binaural',
-    zh: '雙耳錄音',
-    description: '用兩支像耳朵一樣分開擺放的麥克風收音，戴上耳機時聲音會有方向與距離感。',
+    term: 'ASMR Immunity',
+    zh: 'ASMR 免疫',
+    description: '長期聽同一種觸發音後，暫時感覺不到酥麻的現象。通常暫停一段時間、換換口味就會恢復。',
+  },
+  {
+    term: 'Personal Attention',
+    zh: '個人關注',
+    description: '透過眼神接觸、直接對觀眾說話和模擬照顧的動作，營造「有人正專心關心我」的感覺。',
   },
   {
     term: 'Roleplay',
     zh: '情境扮演',
-    description: '以剪髮、看診、化妝等日常服務為劇本，營造「被專注照顧」的聽覺體驗。',
+    description: '創作者扮演理髮師、醫生、化妝師等角色，用輕聲說話與動作，讓你彷彿身在現場。',
+  },
+  {
+    term: 'Binaural',
+    zh: '雙耳錄音',
+    description: '模擬人類雙耳收音的錄音方式。戴上耳機時，能聽出聲音的位置與距離，臨場感更強。',
+  },
+  {
+    term: 'ASMRtists',
+    zh: 'ASMR 創作者',
+    description: 'ASMR + Artists。指透過聲音、動作或情境設計來製作 ASMR 內容的人。',
   },
 ]
 
-export const triggers = ['耳語', '輕敲', '翻書', '刷子', '剪刀', '雨聲', '咀嚼', '打字', '摺紙', '慢動作']
+/**
+ * ASMR 的五種子類型（依期中報告「文化地景繪製」整理）
+ * 分成兩個面向：聲音來源（想讓你聽到什麼）與呈現方式（怎麼呈現給你）。
+ * - icon：動畫圖示（mouth 嘴唇、tap 敲擊、rain 雨、roleplay 對話、eye 眼睛），畫在 archive-page.tsx
+ * - color：圖示的顏色
+ */
+export const asmrTypeGroups = [
+  {
+    label: '聲音來源',
+    question: '想讓你聽到什麼',
+    types: [
+      { icon: 'mouth', color: '#ff9ad5', en: 'Mouth sounds', name: '口腔音', line: '唇音、氣音、咀嚼聲，\n像有人就在耳邊。' },
+      { icon: 'tap', color: '#4cc9ff', en: 'Object sounds', name: '純物件聲', line: '敲擊、摩擦、揉捏，\n只聽材質本身。' },
+      { icon: 'rain', color: '#6ff5c8', en: 'Nature sounds', name: '大自然', line: '雨聲、營火、海浪，\n陪你慢慢入睡。' },
+    ],
+  },
+  {
+    label: '呈現方式',
+    question: '怎麼呈現給你',
+    types: [
+      { icon: 'roleplay', color: '#a084ff', en: 'Roleplay', name: '角色扮演', line: '理髮師、醫生、化妝師，\n一對一照顧你。' },
+      { icon: 'eye', color: '#4cc9ff', en: 'Visual', name: '視覺型', line: '光影與手勢，\n關掉聲音也能放鬆。' },
+    ],
+  },
+] as const
 
 /** 史實已查證（SteadyHealth、Rolling Stone、PeerJ、ArkDes 等） */
 export const timeline = [
