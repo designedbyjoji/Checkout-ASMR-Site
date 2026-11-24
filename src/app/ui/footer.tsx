@@ -7,11 +7,12 @@ import { CheckoutLogo, Icon, ThreadsLogo } from './shared'
  * ================================================================
  * Footer（每一頁最下方）
  * 文字在 site-content.ts 的 site 與 siteNav 修改
+ * 手機版（md 以下）不顯示：頁面連結已在漢堡選單，社群按鈕與版權文字也移到選單最下方（header.tsx）
  * ================================================================
  */
 export function Footer() {
   return (
-    <footer className="relative z-10 bg-[#050812cc] px-5 pt-4 pb-8 backdrop-blur-sm sm:px-8 xl:px-10">
+    <footer className="relative z-10 hidden bg-[#050812cc] px-5 pt-4 pb-8 backdrop-blur-sm sm:px-8 xl:px-10 md:block">
       {/* 寬度與左右留白跟 Header 一致，讓 Logo 和連結欄位對齊 Header */}
       <div className="mx-auto max-w-7xl border-t lg:max-w-none border-[#ffffff1f]">
         <div className="grid gap-12 py-14 md:flex md:items-start md:justify-between md:gap-8 lg:py-16">

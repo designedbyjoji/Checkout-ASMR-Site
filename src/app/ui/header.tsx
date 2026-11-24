@@ -3,8 +3,8 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { siteNav } from './site-content'
-import { CheckoutLogo, Icon } from './shared'
+import { site, siteNav } from './site-content'
+import { CheckoutLogo, Icon, ThreadsLogo } from './shared'
 
 
 /**
@@ -146,6 +146,31 @@ export function Header() {
               </ul>
             </div>
           ))}
+
+          {/* 社群按鈕＋版權（手機版沒有 Footer，所以放在這裡） */}
+          <div
+            className={`pt-10 transition-all duration-700 ${open ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}
+            style={{ transitionDelay: open ? `${120 + siteNav.length * 70}ms` : '0ms' }}
+          >
+            <div className="flex gap-3">
+              {[
+                { href: site.instagram, label: 'Instagram', icon: <Icon name="instagram" className="size-6" /> },
+                { href: site.threads, label: 'Threads', icon: <ThreadsLogo className="size-5" /> },
+              ].map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  className="grid size-12 place-items-center rounded-2xl border border-[#ffffff40] text-[#e6efee] transition-colors hover:border-[#6ff5c8] hover:text-[#6ff5c8]"
+                >
+                  {social.icon}
+                </a>
+              ))}
+            </div>
+            <p className="mt-6 text-xs font-[400] tracking-wide text-[#e6efee8c]">{site.copyright}</p>
+          </div>
         </nav>
       </div>
     </>
