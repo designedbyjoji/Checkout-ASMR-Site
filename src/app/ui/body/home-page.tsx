@@ -35,7 +35,8 @@ export function Hero() {
   }, [])
 
   return (
-    <section id="top" className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-6 pt-20 pb-28">
+    // 三列格線：上下兩列等高，中間放主要文字，讓文字剛好落在畫面正中央（和光球同心）
+    <section id="top" className="relative grid min-h-[100svh] grid-rows-[1fr_auto_1fr] overflow-hidden px-6 py-24">
       {/* 呼吸光球 */}
       <div
         aria-hidden="true"
@@ -52,7 +53,7 @@ export function Hero() {
         />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-4xl text-center">
+      <div className="relative z-10 row-start-2 mx-auto w-full max-w-4xl text-center">
         <p className="kicker reveal font-[700] !tracking-[0.18em] sm:!tracking-[0.28em]">Autonomous Sensory Meridian Response, ASMR</p>
         <h1 className="reveal mt-7 text-[clamp(2.6rem,9vw,6.2rem)] leading-[1.08] font-[700] tracking-[0.04em]">
           把世界
@@ -73,11 +74,12 @@ export function Hero() {
             什麼是 ASMR？
           </Link>
         </div>
-
-        <p className="mt-14 text-xs font-[700] tracking-[0.4em] text-[#e6efee66]" aria-live="off">
-          <span className="transition-opacity duration-700">{inhale ? '吸 氣 ⋯' : '吐 氣 ⋯'}</span>
-        </p>
       </div>
+
+      {/* 呼吸提示放在下方那一列，不算進「置中」的文字區塊 */}
+      <p className="relative z-10 row-start-3 mt-10 self-start text-center text-xs font-[700] tracking-[0.4em] text-[#e6efee66]" aria-live="off">
+        <span className="transition-opacity duration-700">{inhale ? '吸 氣 ⋯' : '吐 氣 ⋯'}</span>
+      </p>
 
       <a
         href="#start"
