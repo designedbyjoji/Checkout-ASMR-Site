@@ -428,7 +428,7 @@ function ShareSheet({
             ? '在分享選單選 Instagram →「限時動態」，'
             : '用手機打開這頁，就能直接分享到 Instagram。'}
           <br />
-          再按「貼紙 → 連結 → 貼上」，把貼紙放在圖片下方的框框裡。
+          再按「貼紙 → 連結 → 貼上」，把連結貼紙放在喜歡的位置。
         </p>
       </div>
     </div>
@@ -519,23 +519,23 @@ async function makeStoryImage(track: Track): Promise<Blob> {
 
   // 上方 Logo
   const topLogo = await tintedLogo('rgba(230,239,238,0.92)', 64).catch(() => null)
-  if (topLogo) ctx.drawImage(topLogo, (W - topLogo.width) / 2, 170)
+  if (topLogo) ctx.drawImage(topLogo, (W - topLogo.width) / 2, 200)
   ctx.textAlign = 'center'
   ctx.fillStyle = 'rgba(230,239,238,0.55)'
   ctx.font = `600 26px ${STORY_FONT}`
   if ('letterSpacing' in ctx)
     (ctx as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = '8px'
-  ctx.fillText('ASMR SOUND LIBRARY', W / 2, 285)
+  ctx.fillText('ASMR SOUND LIBRARY', W / 2, 315)
   if ('letterSpacing' in ctx)
     (ctx as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = '0px'
 
   // 玻璃卡片
-  const cardX = 170
+  const cardX = 90
   const cardW = W - cardX * 2
-  const pad = 52
+  const pad = 60
   const coverSize = cardW - pad * 2
-  const cardY = 340
-  const cardH = pad + coverSize + 230 + 150 + 70
+  const cardY = 380
+  const cardH = pad + coverSize + 423 + pad
   ctx.save()
   ctx.shadowColor = 'rgba(0,0,0,0.55)'
   ctx.shadowBlur = 80
@@ -616,16 +616,16 @@ async function makeStoryImage(track: Track): Promise<Blob> {
   ctx.textAlign = 'left'
   const textY = coverY + coverSize + 100
   ctx.fillStyle = '#ffffff'
-  ctx.font = `700 60px ${STORY_FONT}`
+  ctx.font = `700 68px ${STORY_FONT}`
   ctx.fillText(fitText(ctx, track.title, coverSize), coverX, textY)
   ctx.fillStyle = 'rgba(230,239,238,0.55)'
-  ctx.font = `500 40px ${STORY_FONT}`
-  ctx.fillText(fitText(ctx, track.creatorName, coverSize), coverX, textY + 64)
+  ctx.font = `500 44px ${STORY_FONT}`
+  ctx.fillText(fitText(ctx, track.creatorName, coverSize), coverX, textY + 62)
 
   // 玻璃播放鍵
   const cx = W / 2
-  const cy = textY + 64 + 130
-  const r = 62
+  const cy = textY + 62 + 125
+  const r = 68
   ctx.save()
   ctx.shadowColor = 'rgba(0,0,0,0.6)'
   ctx.shadowBlur = 30
@@ -644,9 +644,9 @@ async function makeStoryImage(track: Track): Promise<Blob> {
   ctx.strokeStyle = 'rgba(255,255,255,0.28)'
   ctx.stroke()
   ctx.beginPath()
-  ctx.moveTo(cx - 14, cy - 22)
-  ctx.lineTo(cx + 22, cy)
-  ctx.lineTo(cx - 14, cy + 22)
+  ctx.moveTo(cx - 15, cy - 24)
+  ctx.lineTo(cx + 24, cy)
+  ctx.lineTo(cx - 15, cy + 24)
   ctx.closePath()
   ctx.lineJoin = 'round'
   ctx.lineWidth = 5
@@ -654,30 +654,8 @@ async function makeStoryImage(track: Track): Promise<Blob> {
   ctx.stroke()
 
   // 卡片左下角小 Logo
-  const small = await tintedLogo('rgba(230,239,238,0.4)', 30).catch(() => null)
-  if (small) ctx.drawImage(small, coverX, cardY + cardH - pad - 22)
-
-  // 卡片下方：預留「連結貼紙」的位置（Instagram 不允許自動加連結，由發限動的人把貼紙放上來）
-  const cardBottom = cardY + cardH
-  ctx.textAlign = 'center'
-  ctx.fillStyle = 'rgba(230,239,238,0.85)'
-  ctx.font = `600 38px ${STORY_FONT}`
-  ctx.fillText('點下方連結，聽完整聲音 ↓', W / 2, cardBottom + 92)
-  const slotW = 600
-  const slotH = 112
-  const slotX = (W - slotW) / 2
-  const slotY = cardBottom + 130
-  roundedRect(ctx, slotX, slotY, slotW, slotH, slotH / 2)
-  ctx.fillStyle = 'rgba(111,245,200,0.06)'
-  ctx.fill()
-  ctx.setLineDash([14, 12])
-  ctx.lineWidth = 3
-  ctx.strokeStyle = 'rgba(111,245,200,0.55)'
-  ctx.stroke()
-  ctx.setLineDash([])
-  ctx.fillStyle = 'rgba(111,245,200,0.7)'
-  ctx.font = `500 30px ${STORY_FONT}`
-  ctx.fillText('連結貼紙放這裡', W / 2, slotY + slotH / 2 + 11)
+  const small = await tintedLogo('rgba(230,239,238,0.4)', 34).catch(() => null)
+  if (small) ctx.drawImage(small, coverX, cardY + cardH - pad - 34)
 
   return new Promise((resolve, reject) =>
     canvas.toBlob(
