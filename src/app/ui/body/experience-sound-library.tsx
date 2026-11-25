@@ -21,6 +21,7 @@ export function Library({ tracks: allTracks }: { tracks: Track[] }) {
   const [filter, setFilter] = useState<string>('all')
   const [uploadOpen, setUploadOpen] = useState(false)
   const [sharing, setSharing] = useState<Track | null>(null)
+  const [linkCopied, setLinkCopied] = useState(false)
   const [highlightId, setHighlightId] = useState<string | null>(null)
   const [toast, setToast] = useState('')
   const rowRef = useRef<HTMLUListElement>(null)
@@ -169,7 +170,12 @@ export function Library({ tracks: allTracks }: { tracks: Track[] }) {
                     </p>
                   </div>
                   <button
-                    onClick={() => setSharing(track)}
+                    onClick={() => {
+                      // 按下分享的同時就把連結複製好，到 Instagram 直接貼上連結貼紙
+                      setLinkCopied(false)
+                      copyTrackLink(track).then(setLinkCopied)
+                      setSharing(track)
+                    }}
                     className="grid size-10 shrink-0 place-items-center rounded-full text-[#e6efee99] transition-colors hover:bg-[#ffffff0f] hover:text-[#e6efee]"
                     aria-label={`分享 ${track.title}`}
                   >
@@ -218,7 +224,13 @@ export function Library({ tracks: allTracks }: { tracks: Track[] }) {
       )}
 
       <UploadDialog open={uploadOpen} onClose={closeUpload} />
-      <ShareSheet track={sharing} onClose={closeShare} onToast={showToast} />
+      <ShareSheet
+        track={sharing}
+        linkCopied={linkCopied}
+        onCopied={setLinkCopied}
+        onClose={closeShare}
+        onToast={showToast}
+      />
 
       <div
         role="status"
@@ -254,7 +266,10 @@ function TrackCover({ track, className = '' }: { track: Track; className?: strin
           onError={() => setFailed(true)}
         />
       ) : (
-        <div className="grid size-full place-items-center text-[#e6efeee6]" style={{ background: FALLBACK_COVER_BG }}>
+        <div
+          className="grid size-full place-items-center text-[#e6efeee6]"
+          style={{ background: FALLBACK_COVER_BG }}
+        >
           <CheckoutLogo size="lg" />
         </div>
       )}
@@ -270,13 +285,28 @@ function trackLink(track: Track) {
   return url.toString()
 }
 
+/** 把這首聲音的連結複製到剪貼簿；成功回傳 true */
+async function copyTrackLink(track: Track) {
+  try {
+    await navigator.clipboard.writeText(trackLink(track))
+    return true
+  } catch {
+    return false
+  }
+}
+
 /** 分享視窗：產生 1080×1920 的限動圖片，可直接分享（手機）或下載（電腦），也可以複製連結 */
 function ShareSheet({
   track,
+  linkCopied,
+  onCopied,
   onClose,
   onToast,
 }: {
   track: Track | null
+  /** 連結是否已經自動複製好 */
+  linkCopied: boolean
+  onCopied: (copied: boolean) => void
   onClose: () => void
   onToast: (text: string) => void
 }) {
@@ -316,6 +346,8 @@ function ShareSheet({
   async function shareImage() {
     if (!image || !track) return
     const file = new File([image.blob], `checkout-${track.id}.png`, { type: 'image/png' })
+    // 再複製一次，確保到 Instagram 時剪貼簿裡是這首的連結（不等它完成，以免手機擋掉分享）
+    copyTrackLink(track).then((ok) => ok && onCopied(true))
     if (canShareFiles) {
       try {
         await navigator.share({ files: [file] })
@@ -333,12 +365,9 @@ function ShareSheet({
 
   async function copyLink() {
     if (!track) return
-    try {
-      await navigator.clipboard.writeText(trackLink(track))
-      onToast('連結已複製')
-    } catch {
-      onToast('無法複製，請長按網址列複製')
-    }
+    const ok = await copyTrackLink(track)
+    onCopied(ok)
+    onToast(ok ? '連結已複製' : '無法複製，請長按網址列複製')
   }
 
   return (
@@ -377,7 +406,14 @@ function ShareSheet({
           )}
         </div>
 
-        <div className="mt-6 grid gap-3">
+        <p
+          role="status"
+          className={`mt-5 text-center text-sm font-[500] ${linkCopied ? 'text-[#6ff5c8]' : 'text-[#e6efee80]'}`}
+        >
+          {linkCopied ? '✓ 聲音連結已自動複製' : '連結還沒複製，可以按下方「複製聲音連結」'}
+        </p>
+
+        <div className="mt-4 grid gap-3">
           <button
             onClick={shareImage}
             disabled={!image}
@@ -392,10 +428,10 @@ function ShareSheet({
         </div>
         <p className="mt-4 text-center text-xs leading-5 font-[400] text-[#e6efee73]">
           {canShareFiles
-            ? '在分享選單選 Instagram →「限時動態」。'
+            ? '在分享選單選 Instagram →「限時動態」，'
             : '用手機打開這頁，就能直接分享到 Instagram。'}
           <br />
-          再加上「連結」貼紙、貼上聲音連結，朋友就能點進來聽。
+          再按「貼紙 → 連結 → 貼上」，把貼紙放在圖片下方的框框裡。
         </p>
       </div>
     </div>
@@ -486,22 +522,22 @@ async function makeStoryImage(track: Track): Promise<Blob> {
 
   // 上方 Logo
   const topLogo = await tintedLogo('rgba(230,239,238,0.92)', 64).catch(() => null)
-  if (topLogo) ctx.drawImage(topLogo, (W - topLogo.width) / 2, 190)
+  if (topLogo) ctx.drawImage(topLogo, (W - topLogo.width) / 2, 170)
   ctx.textAlign = 'center'
   ctx.fillStyle = 'rgba(230,239,238,0.55)'
   ctx.font = `600 26px ${STORY_FONT}`
   if ('letterSpacing' in ctx)
     (ctx as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = '8px'
-  ctx.fillText('ASMR SOUND LIBRARY', W / 2, 310)
+  ctx.fillText('ASMR SOUND LIBRARY', W / 2, 285)
   if ('letterSpacing' in ctx)
     (ctx as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = '0px'
 
   // 玻璃卡片
-  const cardX = 150
+  const cardX = 170
   const cardW = W - cardX * 2
   const pad = 52
   const coverSize = cardW - pad * 2
-  const cardY = 400
+  const cardY = 340
   const cardH = pad + coverSize + 230 + 150 + 70
   ctx.save()
   ctx.shadowColor = 'rgba(0,0,0,0.55)'
@@ -624,14 +660,27 @@ async function makeStoryImage(track: Track): Promise<Blob> {
   const small = await tintedLogo('rgba(230,239,238,0.4)', 30).catch(() => null)
   if (small) ctx.drawImage(small, coverX, cardY + cardH - pad - 22)
 
-  // 卡片下方說明
+  // 卡片下方：預留「連結貼紙」的位置（Instagram 不允許自動加連結，由發限動的人把貼紙放上來）
+  const cardBottom = cardY + cardH
   ctx.textAlign = 'center'
-  ctx.fillStyle = 'rgba(230,239,238,0.7)'
-  ctx.font = `500 36px ${STORY_FONT}`
-  ctx.fillText('戴上耳機，來 Checkout. 聽完整聲音', W / 2, cardY + cardH + 120)
-  ctx.fillStyle = 'rgba(111,245,200,0.85)'
+  ctx.fillStyle = 'rgba(230,239,238,0.85)'
+  ctx.font = `600 38px ${STORY_FONT}`
+  ctx.fillText('點下方連結，聽完整聲音 ↓', W / 2, cardBottom + 92)
+  const slotW = 600
+  const slotH = 112
+  const slotX = (W - slotW) / 2
+  const slotY = cardBottom + 130
+  roundedRect(ctx, slotX, slotY, slotW, slotH, slotH / 2)
+  ctx.fillStyle = 'rgba(111,245,200,0.06)'
+  ctx.fill()
+  ctx.setLineDash([14, 12])
+  ctx.lineWidth = 3
+  ctx.strokeStyle = 'rgba(111,245,200,0.55)'
+  ctx.stroke()
+  ctx.setLineDash([])
+  ctx.fillStyle = 'rgba(111,245,200,0.7)'
   ctx.font = `500 30px ${STORY_FONT}`
-  ctx.fillText(window.location.host, W / 2, cardY + cardH + 175)
+  ctx.fillText('連結貼紙放這裡', W / 2, slotY + slotH / 2 + 11)
 
   return new Promise((resolve, reject) =>
     canvas.toBlob(
@@ -837,7 +886,10 @@ export function UploadDialog({ open, onClose }: { open: boolean; onClose: () => 
                   // eslint-disable-next-line @next/next/no-img-element -- 本機預覽
                   <img src={cover.url} alt="封面預覽" className="size-full object-cover" />
                 ) : (
-                  <span className="grid size-full place-items-center px-2 text-[#e6efeecc]" style={{ background: FALLBACK_COVER_BG }}>
+                  <span
+                    className="grid size-full place-items-center px-2 text-[#e6efeecc]"
+                    style={{ background: FALLBACK_COVER_BG }}
+                  >
                     <CheckoutLogo size="xs" />
                   </span>
                 )}
