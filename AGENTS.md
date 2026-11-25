@@ -43,7 +43,9 @@ Traditional Chinese, and ask before making decisions that are hard to undo.
   - `body/` — one file per Header section (holds all its sub-pages): `home-page.tsx`, `about-page.tsx`, `archive-page.tsx`,
     `experience-page.tsx` (server, loads tracks); the experience page's client parts are
     `experience-quiz-and-lab.tsx` (MatchQuiz + SoundLab) and `experience-sound-library.tsx`
-    (Library + UploadDialog).
+    (Library + UploadDialog). `about-mission-story.tsx` (client) is the scroll-driven
+    story shown on the HOME page after the Hero (5 sticky scenes; copy in `missionStory`;
+    reduced-motion users get the plain `Mission` instead). `/about/mission` shows plain `Mission`.
   - `audio-player.tsx` — site-wide bottom player (PlayerProvider/usePlayer/PlayerBar), used in layout.
   - `site-effects.tsx` — site-wide client effects: Aurora, HeadphoneGate, RevealObserver.
   - `shared.tsx` — server-safe building blocks: Icon, CheckoutLogo, Section/SectionHeading/PageIntro,

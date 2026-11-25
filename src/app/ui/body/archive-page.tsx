@@ -53,9 +53,7 @@ export function Glossary() {
   return (
     <Section id="glossary">
       <SectionHeading
-        weight={{ index: 700, kicker: 700, title: 900, lead: 700 }}
-        index="01"
-        kicker="Glossary"
+        weight={{ title: 900, lead: 700 }}
         title={
           <>
             一種由聲音引起的
@@ -92,9 +90,7 @@ export function AsmrTypes() {
   return (
     <Section id="types">
       <SectionHeading
-        weight={{ index: 700, kicker: 700, title: 900, lead: 700 }}
-        index="02"
-        kicker="Five styles"
+        weight={{ title: 900, lead: 700 }}
         title={
           <>
             五種 ASMR，
@@ -216,9 +212,7 @@ export function Timeline() {
   return (
     <Section id="history">
       <SectionHeading
-        weight={{ index: 700, kicker: 700, title: 900}}
-        index="03"
-        kicker="A short history"
+        weight={{ title: 900}}
         title={
           <>
             從一篇討論串，
@@ -271,9 +265,7 @@ export function Sociology() {
   return (
     <Section id="sociology">
       <SectionHeading
-        weight={{ index: 700, kicker: 700, title: 900, lead: 700 }}
-        index="04"
-        kicker="Sociological insight"
+        weight={{ title: 900, lead: 700 }}
         title={
           <>
             為什麼我們

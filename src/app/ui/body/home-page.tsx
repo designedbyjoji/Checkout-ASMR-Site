@@ -1,23 +1,26 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
 import { Icon, Section, SectionHeading } from '../shared'
 import { gateways } from '../site-content'
+import { Mission } from './about-page'
+import { MissionStory, Scene, ease, mix, range } from './about-mission-story'
 
 /**
- * 首頁（網址 /）：主視覺 Hero ＋ 三個入口卡片
+ * 首頁（網址 /）：主視覺 Hero ＋ 捲動故事 ＋ 三個入口卡片
  */
 
 // ─────────────── 首頁段落順序 ───────────────
 
 /**
  * 首頁內容。想調整首頁段落順序，請改這個檔案。
+ *   Hero（大標題）→ 往下滑的捲動故事（5 幕，跟「創立初衷」同一套）→ 三個入口卡片
  */
 export default function HomePage() {
   return (
     <div className="page-home contents">
       <Hero />
+      <MissionStory fallback={<Mission />} />
       <Gateways />
     </div>
   )
@@ -25,70 +28,37 @@ export default function HomePage() {
 
 // ─────────────── 首頁主視覺 Hero ───────────────
 
-/** 首屏：中間有一顆跟著呼吸節奏縮放的光球（吸 4 秒、吐 4 秒）。 */
+/** 首屏：只有大標題和兩行敘述；往下滑時慢慢淡出、縮小，接著進入捲動故事。 */
 export function Hero() {
-  const [inhale, setInhale] = useState(true)
-
-  useEffect(() => {
-    const id = window.setInterval(() => setInhale((v) => !v), 4000)
-    return () => window.clearInterval(id)
-  }, [])
-
   return (
-    // 三列格線：上下兩列等高，中間放主要文字，讓文字剛好落在畫面正中央（和光球同心）
-    <section id="top" className="relative grid min-h-[100svh] grid-rows-[1fr_auto_1fr] overflow-hidden px-6 py-24">
-      {/* 呼吸光球 */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute top-1/2 left-1/2 size-[min(78vw,520px)] -translate-x-1/2 -translate-y-1/2"
-      >
-        <div
-          className="size-full rounded-full transition-transform duration-[4000ms] ease-in-out"
-          style={{
-            transform: `scale(${inhale ? 1.06 : 0.82})`,
-            background:
-              'radial-gradient(circle at 35% 30%, #6ff5c859, #4cc9ff2e 40%, #a084ff1f 65%, transparent 72%)',
-            filter: 'blur(8px)',
-          }}
-        />
-      </div>
-
-      <div className="relative z-10 row-start-2 mx-auto w-full max-w-4xl text-center">
-        <p className="kicker reveal font-[700] !tracking-[0.18em] sm:!tracking-[0.28em]">Autonomous Sensory Meridian Response, ASMR</p>
-        <h1 className="reveal mt-7 text-[clamp(2.6rem,9vw,6.2rem)] leading-[1.08] font-[700] tracking-[0.04em]">
-          把世界
-          <br className="sm:hidden" />
-          <span className="aurora-text font-[700]">調小聲</span>一點
-        </h1>
-        <p className="reveal mx-auto mt-8 max-w-xl text-[clamp(1rem,2.4vw,1.25rem)] leading-relaxed font-[700] text-[#e6efeeb2]">
-          這裡沒有演算法，只有頭皮發麻。
-          <br />
-          一個收藏、理解與分享 ASMR 的聲音角落。
-        </p>
-
-        <div className="reveal mt-12 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link href="/experience/match" className="btn-primary w-full max-w-64 font-[600] sm:w-auto">
-            <Icon name="headphones" className="size-4" /> 開始體驗
-          </Link>
-          <Link href="/archive/glossary" className="btn-ghost w-full max-w-64 font-[500] sm:w-auto">
-            什麼是 ASMR？
-          </Link>
-        </div>
-      </div>
-
-      {/* 呼吸提示放在下方那一列，不算進「置中」的文字區塊 */}
-      <p className="relative z-10 row-start-3 mt-10 self-start text-center text-xs font-[700] tracking-[0.4em] text-[#e6efee66]" aria-live="off">
-        <span className="transition-opacity duration-700">{inhale ? '吸 氣 ⋯' : '吐 氣 ⋯'}</span>
-      </p>
-
-      <a
-        href="#start"
-        aria-label="往下捲動"
-        className="absolute bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-1/2 grid size-10 -translate-x-1/2 place-items-center rounded-full border border-[#ffffff26] text-[#e6efee99] transition-colors hover:text-[#e6efee]"
-      >
-        <Icon name="down" className="size-4" />
-      </a>
-    </section>
+    <div id="top">
+      <Scene screens={1.3}>
+        {(p) => {
+          const out = ease(range(p, 0.1, 1)) // 不完全消失，留一點點讓它自然被捲走，避免出現一整個空白畫面
+          return (
+            <div
+              className="mx-auto w-full max-w-4xl text-center"
+              style={{
+                opacity: 1 - out * 0.75,
+                transform: `translateY(${-out * 40}px) scale(${mix(1, 0.94, out)})`,
+                filter: `blur(${out * 4}px)`,
+              }}
+            >
+              <h1 className="text-[clamp(2.6rem,9vw,6.2rem)] leading-[1.08] font-[700] tracking-[0.04em]">
+                把世界
+                <br className="sm:hidden" />
+                <span className="aurora-text font-[700]">調小聲</span>一點
+              </h1>
+              <p className="mx-auto mt-8 max-w-xl text-[clamp(1rem,2.4vw,1.25rem)] leading-relaxed font-[700] text-[#e6efeeb2]">
+                這裡沒有演算法，只有頭皮發麻。
+                <br />
+                一個收藏、理解與分享 ASMR 的聲音角落。
+              </p>
+            </div>
+          )
+        }}
+      </Scene>
+    </div>
   )
 }
 
@@ -98,7 +68,7 @@ export function Hero() {
 export function Gateways() {
   return (
     <Section id="start">
-      <SectionHeading weight={{ index: 700, kicker: 700, title: 900 }} index="—" kicker="Where to start" title="今天想從哪裡開始？" />
+      <SectionHeading weight={{ title: 900 }} title="今天想從哪裡開始？" />
       <div className="mt-14 grid gap-4 md:grid-cols-3 lg:mt-20">
         {gateways.map((g, i) => (
           <Link

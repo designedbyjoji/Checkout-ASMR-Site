@@ -101,9 +101,7 @@ export function Library({ tracks: allTracks }: { tracks: Track[] }) {
     <Section id="library">
       <div className="flex flex-col justify-between gap-10 lg:flex-row lg:items-end">
         <SectionHeading
-          weight={{ index: 700, kicker: 700, title: 900, lead: 700 }}
-          index="03"
-          kicker="Sound library"
+          weight={{ title: 900, lead: 700 }}
           title={
             <>
               選一個聲音，

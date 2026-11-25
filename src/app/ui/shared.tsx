@@ -186,38 +186,24 @@ export function CheckoutLogo({ className = '', size = 'md' }: { className?: stri
 // ─────────────── 區塊標題 SectionHeading／頁面開頭 PageIntro ───────────────
 
 /**
- * 每個段落開頭的標題（編號 ─ 英文小標 ／ 大標題 ／ 導言）
+ * 每個段落開頭的標題（大標題 ／ 導言）
  * weight：文字粗細，由使用這個標題的頁面自己決定，
- *     例如 weight={{ index: 700, kicker: 700, title: 900, lead: 700 }}（全站標準，跟「關於我們」一致）
+ *     例如 weight={{ title: 900, lead: 700 }}（全站標準，跟「關於我們」一致）
  *     數字越大越粗：100 最細 · 300 細 · 400 一般 · 500 中 · 600 粗 · 900 最粗
  */
 export function SectionHeading({
   weight,
-  index,
-  kicker,
   title,
   lead,
 }: {
-  weight: { index: number; kicker: number; title: number; lead?: number }
-  index: string
-  kicker: string
+  weight: { title: number; lead?: number }
   title: React.ReactNode
   lead?: string
 }) {
   return (
     <div className="reveal max-w-3xl">
-      <p className="kicker flex items-center gap-3" style={{ fontWeight: weight.kicker }}>
-        <span
-          className="font-serif text-base tracking-normal text-[#6ff5c8e6] normal-case italic"
-          style={{ fontWeight: weight.index }}
-        >
-          {index}
-        </span>
-        <span className="h-px w-8 bg-[#ffffff33]" />
-        {kicker}
-      </p>
       <h2
-        className="mt-6 text-[clamp(2rem,5.5vw,3.75rem)] leading-[1.15] tracking-[0.02em] whitespace-pre-line"
+        className="text-[clamp(2rem,5.5vw,3.75rem)] leading-[1.15] tracking-[0.02em] whitespace-pre-line"
         style={{ fontWeight: weight.title }}
       >
         {title}

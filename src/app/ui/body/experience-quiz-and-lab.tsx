@@ -35,9 +35,7 @@ export function MatchQuiz() {
     <Section id="match">
       <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
         <SectionHeading
-          weight={{ index: 700, kicker: 700, title: 900, lead: 700 }}
-          index="01"
-          kicker="Find your trigger"
+          weight={{ title: 900, lead: 700 }}
           title={
             <>
               最適合你的
@@ -137,9 +135,7 @@ export function SoundLab() {
   return (
     <Section id="lab">
         <SectionHeading
-          weight={{ index: 700, kicker: 700, title: 900, lead: 700 }}
-          index="02"
-          kicker="Sound lab"
+          weight={{ title: 900, lead: 700 }}
           title={
             <>
               戴上耳機，

@@ -479,6 +479,37 @@
   50% { opacity: 1; transform: scale(1); }
 }
 
+/* ================================================================
+   創立初衷捲動故事（/about/mission，about-mission-story.tsx）
+   ================================================================ */
+/* 收據紙：米白色，底部是鋸齒撕邊 */
+.receipt-paper {
+  background: #eef3f1;
+  box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.7);
+  -webkit-mask:
+    linear-gradient(#000 0 0) top / 100% calc(100% - 9px) no-repeat,
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 18px 9px repeat-x;
+  mask:
+    linear-gradient(#000 0 0) top / 100% calc(100% - 9px) no-repeat,
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 18px 9px repeat-x;
+}
+/* 手機畫面安靜下來後，那顆慢慢呼吸的光 */
+.mission-breathe {
+  animation: mission-breathe 6s ease-in-out infinite;
+}
+@keyframes mission-breathe {
+  0%, 100% { transform: scale(0.8); opacity: 0.6; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+/* 「往下滑」的小箭頭，慢慢上下飄 */
+.mission-hint {
+  animation: mission-hint 2.8s var(--ease-calm) infinite;
+}
+@keyframes mission-hint {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(6px); opacity: 1; }
+}
+
 /* 捲動進場 */
 .reveal {
   opacity: 0;
