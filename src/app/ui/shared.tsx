@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import logo from '@/imports/checkout-logo.svg'
 import threadsLogo from '@/imports/threads-logo.svg'
 import { siteNav } from './site-content'
@@ -23,6 +22,12 @@ const paths = {
     </>
   ),
   chevron: <path d="m6 9 6 6 6-6" />,
+  clock: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3 2" />
+    </>
+  ),
   close: (
     <>
       <path d="m6 6 12 12" />
@@ -231,15 +236,19 @@ export function SectionHeading({
 export function Section({
   id,
   children,
-  className = '',
+  className = 'py-24 lg:py-36',
+  wide = false,
 }: {
   id?: string
   children: React.ReactNode
+  /** 上下留白（預設 py-24 lg:py-36） */
   className?: string
+  /** true：桌機不限寬度，左右邊界跟 Header 的 Logo 對齊 */
+  wide?: boolean
 }) {
   return (
-    <section id={id} className={`relative px-5 py-24 sm:px-8 lg:py-36 ${className}`}>
-      <div className="mx-auto max-w-7xl">{children}</div>
+    <section id={id} className={`relative px-5 sm:px-8 ${wide ? 'xl:px-10' : ''} ${className}`}>
+      <div className={`mx-auto max-w-7xl ${wide ? 'lg:max-w-none' : ''}`}>{children}</div>
     </section>
   )
 }
@@ -290,17 +299,13 @@ export function PageIntro({
 
 /**
  * 每個子分頁（例如 /about/team）共用的外框：
- * 下方＝上一頁／下一頁（子分頁之間主要靠 Header 下拉選單切換）。
- * 子分頁的名稱與順序都來自 site-content.ts 的 siteNav。
+ * 給螢幕閱讀器的頁面標題＋上方留白（子分頁之間靠 Header 下拉選單切換）。
+ * 子分頁的名稱都來自 site-content.ts 的 siteNav。
  */
 export function Subpage({ href, children }: { href: string; children: React.ReactNode }) {
   const group = siteNav.find((g) => g.children.some((c) => c.href === href))
   if (!group) return <>{children}</>
-  const pages = group.children
-  const index = pages.findIndex((c) => c.href === href)
-  const current = pages[index]
-  const prev = pages[index - 1]
-  const next = pages[index + 1]
+  const current = group.children.find((c) => c.href === href)!
 
   return (
     <>
@@ -311,69 +316,6 @@ export function Subpage({ href, children }: { href: string; children: React.Reac
       <div className="pt-[calc(3rem+env(safe-area-inset-top))] sm:pt-[calc(5rem+env(safe-area-inset-top))] lg:pt-[calc(3rem+env(safe-area-inset-top))]">
         {children}
       </div>
-
-      {(prev || next) && (
-        <nav aria-label="上一頁／下一頁" className="relative px-5 pb-20 sm:px-8 lg:pb-28">
-          <div className="mx-auto flex max-w-7xl flex-col gap-3 border-t border-[#ffffff1a] pt-8 sm:flex-row sm:justify-between">
-            {prev ? (
-              <Link
-                href={prev.href}
-                className="group flex flex-col gap-1 text-[#e6efeeb2] transition-colors hover:text-[#6ff5c8]"
-              >
-                <span className="text-xs font-[400] tracking-[0.3em] text-[#e6efee73]">上一頁</span>
-                <span className="inline-flex items-center gap-2 text-lg font-[600] tracking-[0.1em]">
-                  <Icon
-                    name="arrow"
-                    className="size-4 rotate-180 transition-transform duration-500 group-hover:-translate-x-1"
-                  />
-                  {prev.label}
-                </span>
-              </Link>
-            ) : (
-              <span />
-            )}
-            {next && (
-              <Link
-                href={next.href}
-                className="group flex flex-col gap-1 text-[#e6efeeb2] transition-colors hover:text-[#6ff5c8] sm:items-end"
-              >
-                <span className="text-xs font-[400] tracking-[0.3em] text-[#e6efee73]">下一頁</span>
-                <span className="inline-flex items-center gap-2 text-lg font-[600] tracking-[0.1em]">
-                  {next.label}
-                  <Icon
-                    name="arrow"
-                    className="size-4 transition-transform duration-500 group-hover:translate-x-1"
-                  />
-                </span>
-              </Link>
-            )}
-          </div>
-        </nav>
-      )}
     </>
-  )
-}
-
-// ─────────────── 播放中的小波形 MiniWave ───────────────
-
-/** 小小的聲波動畫（播放中會跳動） */
-export function MiniWave({
-  active,
-  className = 'text-[#6ff5c8b2]',
-}: {
-  active: boolean
-  className?: string
-}) {
-  const bars = [40, 70, 45, 90, 55, 80, 35, 65, 50, 75, 40, 60]
-  return (
-    <span className={`flex h-6 items-center gap-[3px] ${className}`} aria-hidden="true">
-      {bars.map((h, i) => (
-        <span
-          key={i}
-          className={`block w-[2px] rounded-full bg-current transition-opacity ${active ? 'animate-wave opacity-100' : 'opacity-30'}`}
-          style={{ height: `${h}%`, animationDelay: `${i * 70}ms` }}
-        />
-      ))}
-    </span>
   )
 }

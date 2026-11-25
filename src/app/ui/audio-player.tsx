@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { claimAudio, onAudioClaimed } from '@/lib/synth'
 import type { Track } from './site-content'
-import { Icon, MiniWave } from './shared'
+import { CheckoutLogo, Icon } from './shared'
 
 /**
  * 底部播放器（全站共用：換頁時音樂不會中斷）
@@ -175,16 +175,25 @@ export function usePlayer() {
 }
 
 /* ================================================================
-   底部播放列
+   右下角播放卡（深灰玻璃，跟聲音卡片做出區別）
    ================================================================ */
 
-const fmt = (s: number) => {
-  if (!Number.isFinite(s) || s <= 0) return '0:00'
-  const m = Math.floor(s / 60)
-  return `${m}:${String(Math.floor(s % 60)).padStart(2, '0')}`
-}
-
 const sleepOptions = [null, 15, 30, 60] as const
+
+/** 播放卡左邊的小封面：有照片用照片，沒有就用 Checkout. Logo */
+function PlayerCover({ track }: { track: Track }) {
+  const [failed, setFailed] = useState(false)
+  return (
+    <div className="grid size-14 shrink-0 place-items-center overflow-hidden rounded-[10px] bg-[#1c1d22] text-[#e6efeecc] sm:size-16">
+      {track.cover && !failed ? (
+        // eslint-disable-next-line @next/next/no-img-element -- 使用者上傳的圖片，尺寸不固定
+        <img src={track.cover} alt="" className="size-full object-cover" onError={() => setFailed(true)} />
+      ) : (
+        <CheckoutLogo size="xs" />
+      )}
+    </div>
+  )
+}
 
 export function PlayerBar({ player }: { player: AudioPlayer }) {
   const { track, playing, time, duration, error, sleepEndsAt } = player
@@ -204,79 +213,84 @@ export function PlayerBar({ player }: { player: AudioPlayer }) {
 
   return (
     <>
-    {/* 墊高頁面底部，避免播放列蓋住 Footer */}
-    <div aria-hidden="true" className="h-28" />
-    <div className="fixed inset-x-0 bottom-0 z-40 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-6">
-      <div className="mx-auto max-w-3xl rounded-3xl border border-[#ffffff1a] bg-[#0a1020cc] shadow-[0_20px_80px_-20px_#000000cc] backdrop-blur-2xl">
-        <input
-          type="range"
-          min={0}
-          max={duration || 0}
-          step={0.1}
-          value={time}
-          onChange={(e) => player.seek(Number(e.target.value))}
-          className="slider -mb-2 block px-4 pt-1"
-          style={{ '--fill': `${progress}%` } as React.CSSProperties}
-          aria-label="播放進度"
-          disabled={!duration}
-        />
-        <div className="flex items-center gap-3 px-3 pt-1 pb-3 sm:gap-4 sm:px-4">
-          <button
-            onClick={() => (playing ? player.pause() : player.resume())}
-            className="grid size-12 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#6ff5c8] to-[#4cc9ff] text-[#050812]"
-            aria-label={playing ? '暫停' : '播放'}
-          >
-            <Icon name={playing ? 'pause' : 'play'} className="size-5" />
-          </button>
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-[500]">{track.title}</p>
-            <p className="truncate text-xs font-[400] text-[#e6efee80]">
-              {error ? <span className="text-[#ff9ad5]">{error}</span> : `${track.creatorName} · ${fmt(time)} / ${fmt(duration)}`}
-            </p>
-          </div>
-          <MiniWave active={playing} className="hidden text-[#6ff5c8b2] sm:flex" />
-
-          <div className="relative">
-            <button
-              onClick={() => setSleepOpen((v) => !v)}
-              className={`flex h-10 items-center gap-1.5 rounded-full px-3 text-xs font-[400] transition-colors hover:bg-[#ffffff0d] ${
-                sleepLeft ? 'text-[#a084ff]' : 'text-[#e6efee8c]'
-              }`}
-              aria-label="睡眠計時"
-              aria-expanded={sleepOpen}
-            >
-              <Icon name="moon" className="size-[18px]" />
-              {sleepLeft && <span className="tabular-nums">{sleepLeft}分</span>}
-            </button>
-            {sleepOpen && (
-              <div className="absolute right-0 bottom-12 w-44 rounded-2xl border border-[#ffffff1a] bg-[#0a1020f2] p-2 shadow-2xl backdrop-blur-xl">
-                <p className="px-3 pt-2 pb-1 text-[11px] font-[400] tracking-[0.2em] text-[#e6efee66]">睡眠計時</p>
-                {sleepOptions.map((m) => (
-                  <button
-                    key={m ?? 'off'}
-                    onClick={() => {
-                      player.setSleep(m)
-                      setSleepOpen(false)
-                    }}
-                    className="block w-full rounded-xl px-3 py-2.5 text-left text-sm font-[400] hover:bg-[#ffffff0d]"
-                  >
-                    {m ? `${m} 分鐘後停止` : '關閉'}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
+      {/* 墊高頁面底部，避免播放卡蓋住 Footer */}
+      <div aria-hidden="true" className="h-40" />
+      <div className="fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-40 sm:inset-x-auto sm:right-6 sm:bottom-[max(1.5rem,env(safe-area-inset-bottom))] sm:w-[420px]">
+        <div className="glass-player relative rounded-[26px] px-4 pt-4 pb-3.5 sm:px-5 sm:pt-5 sm:pb-4">
+          {/* 關閉 */}
           <button
             onClick={player.close}
-            className="grid size-10 shrink-0 place-items-center rounded-full text-[#e6efee73] hover:bg-[#ffffff0d] hover:text-[#e6efee]"
+            className="player-close absolute -top-2 -right-2 size-7"
             aria-label="關閉播放器"
           >
-            <Icon name="close" className="size-4" />
+            <Icon name="close" className="size-3" />
           </button>
+
+          <div className="flex items-center gap-4">
+            <PlayerCover key={track.id} track={track} />
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-base font-[700]">{track.title}</p>
+              <p className="mt-1 truncate text-sm font-[600] text-[#e6efee80]">
+                {error ? <span className="text-[#ff9ad5]">{error}</span> : track.creatorName}
+              </p>
+            </div>
+
+            {/* 睡眠計時 */}
+            <div className="relative shrink-0">
+              <button
+                onClick={() => setSleepOpen((v) => !v)}
+                className={`flex h-11 min-w-11 items-center justify-center gap-1 rounded-full px-2 transition-colors hover:bg-[#ffffff0d] ${
+                  sleepLeft ? 'text-[#a084ff]' : 'text-[#e6efee80] hover:text-[#e6efeecc]'
+                }`}
+                aria-label="睡眠計時"
+                aria-expanded={sleepOpen}
+              >
+                <Icon name="clock" className="size-6" />
+                {sleepLeft && <span className="text-xs font-[500] tabular-nums">{sleepLeft}分</span>}
+              </button>
+              {sleepOpen && (
+                <div className="glass-player absolute right-0 bottom-full mb-3 w-44 rounded-2xl p-2">
+                  <p className="px-3 pt-2 pb-1 text-[11px] font-[400] tracking-[0.2em] text-[#e6efee66]">睡眠計時</p>
+                  {sleepOptions.map((m) => (
+                    <button
+                      key={m ?? 'off'}
+                      onClick={() => {
+                        player.setSleep(m)
+                        setSleepOpen(false)
+                      }}
+                      className="block w-full rounded-xl px-3 py-2.5 text-left text-sm font-[400] hover:bg-[#ffffff0d]"
+                    >
+                      {m ? `${m} 分鐘後停止` : '關閉'}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <button
+              onClick={() => (playing ? player.pause() : player.resume())}
+              className="glass-button size-12 shrink-0"
+              aria-label={playing ? '暫停' : '播放'}
+            >
+              <Icon name={playing ? 'pause' : 'play'} className={`size-5 ${playing ? '' : 'translate-x-[1px]'}`} />
+            </button>
+          </div>
+
+          {/* 播放進度（可拖曳） */}
+          <input
+            type="range"
+            min={0}
+            max={duration || 0}
+            step={0.1}
+            value={time}
+            onChange={(e) => player.seek(Number(e.target.value))}
+            className="glass-slider mt-4 block"
+            style={{ '--fill': `${progress}%` } as React.CSSProperties}
+            aria-label="播放進度"
+            disabled={!duration}
+          />
         </div>
       </div>
-    </div>
     </>
   )
 }

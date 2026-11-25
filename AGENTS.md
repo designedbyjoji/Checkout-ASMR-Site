@@ -49,7 +49,7 @@ Traditional Chinese, and ask before making decisions that are hard to undo.
   - `audio-player.tsx` — site-wide bottom player (PlayerProvider/usePlayer/PlayerBar), used in layout.
   - `site-effects.tsx` — site-wide client effects: Aurora, HeadphoneGate, RevealObserver.
   - `shared.tsx` — server-safe building blocks: Icon, CheckoutLogo, Section/SectionHeading/PageIntro,
-    Subpage (sub-page frame: sibling tabs on top, prev/next at the bottom), MiniWave.
+    Subpage (sub-page frame: screen-reader title + top spacing under the fixed Header).
   - `site-content.ts` — ALL copy and navigation (siteNav drives both Header and Footer). Edit text here.
 - `src/imports/` — external assets supplied by the team (e.g. `checkout-logo.svg`).
   Replace files here instead of editing components; the logo is rendered as a mask so its colour follows text colour.

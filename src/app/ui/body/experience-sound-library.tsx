@@ -56,37 +56,52 @@ export function Library({ tracks: allTracks }: { tracks: Track[] }) {
     rowRef.current?.scrollTo({ left: 0 })
   }, [filter])
 
+  /*
+   * 滑鼠滾輪在卡片列上 → 改成左右捲動。
+   * 捲到最左／最右時就放手，讓頁面照常上下捲，使用者不會被卡住。
+   * 捲動中先關掉「自動對齊卡片」，停下來後再打開，讓它輕輕吸附到最近的一張。
+   */
+  useEffect(() => {
+    const row = rowRef.current
+    if (!row) return
+    let snapTimer: number | undefined
+    function onWheel(e: WheelEvent) {
+      if (!row || e.ctrlKey) return
+      // 觸控板本來就能左右滑，只處理「上下」方向的滾動
+      if (Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return
+      const delta = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? row.clientWidth : 1)
+      const max = row.scrollWidth - row.clientWidth
+      if (max <= 0) return
+      if ((delta < 0 && row.scrollLeft <= 0) || (delta > 0 && row.scrollLeft >= max - 1)) return
+      e.preventDefault()
+      row.style.scrollSnapType = 'none'
+      row.scrollLeft += delta
+      window.clearTimeout(snapTimer)
+      snapTimer = window.setTimeout(() => {
+        row.style.scrollSnapType = ''
+      }, 180)
+    }
+    row.addEventListener('wheel', onWheel, { passive: false })
+    return () => {
+      row.removeEventListener('wheel', onWheel)
+      window.clearTimeout(snapTimer)
+    }
+  }, [tracks.length])
+
   const showToast = useCallback((text: string) => {
     setToast(text)
     window.setTimeout(() => setToast(''), 2200)
   }, [])
 
-  /** 桌機用的「上一張／下一張」：一次捲動約一張卡片寬 */
-  function scrollRow(direction: 1 | -1) {
-    const row = rowRef.current
-    const card = row?.querySelector('li')
-    if (!row || !card) return
-    row.scrollBy({
-      left: direction * (card.getBoundingClientRect().width + 20) * 2,
-      behavior: 'smooth',
-    })
-  }
-
   const closeUpload = useCallback(() => setUploadOpen(false), [])
   const closeShare = useCallback(() => setSharing(null), [])
 
   return (
-    <Section id="library">
+    <Section id="library" wide className="pt-12 pb-24 sm:pt-10 lg:pt-20 lg:pb-32">
       <div className="flex flex-col justify-between gap-10 lg:flex-row lg:items-end">
         <SectionHeading
           weight={{ title: 900, lead: 700 }}
-          title={
-            <>
-              選一個聲音，
-              <br />
-              慢慢待著
-            </>
-          }
+          title="選一個聲音，慢慢待著"
           lead="來自不同角落、不同人的 ASMR。每段聲音都經過審核才會公開。"
         />
         <button
@@ -98,7 +113,7 @@ export function Library({ tracks: allTracks }: { tracks: Track[] }) {
       </div>
 
       {tracks.length > 0 && (
-        <div className="mt-12 flex items-center justify-between gap-4">
+        <div className="mt-8 flex items-center justify-between gap-4">
           {categories.length > 1 ? (
             <div className="-mx-5 flex min-w-0 gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none] sm:mx-0 sm:px-0">
               <button
@@ -122,24 +137,6 @@ export function Library({ tracks: allTracks }: { tracks: Track[] }) {
           ) : (
             <span />
           )}
-          {visible.length > 1 && (
-            <div className="hidden shrink-0 gap-2 sm:flex">
-              <button
-                onClick={() => scrollRow(-1)}
-                className="glass-button size-11"
-                aria-label="上一組聲音"
-              >
-                <Icon name="arrow" className="size-4 rotate-180" />
-              </button>
-              <button
-                onClick={() => scrollRow(1)}
-                className="glass-button size-11"
-                aria-label="下一組聲音"
-              >
-                <Icon name="arrow" className="size-4" />
-              </button>
-            </div>
-          )}
         </div>
       )}
 
@@ -147,7 +144,7 @@ export function Library({ tracks: allTracks }: { tracks: Track[] }) {
         /* 卡片橫向排一列，可左右滑；桌機會延伸到畫面右邊緣 */
         <ul
           ref={rowRef}
-          className="-mx-5 mt-8 flex snap-x snap-mandatory scroll-px-5 gap-5 overflow-x-auto px-5 pt-2 pb-8 [scrollbar-width:none] sm:-mx-8 sm:scroll-px-8 sm:px-8 xl:mr-[calc(50%-50vw)]"
+          className="-mx-5 mt-6 flex snap-x snap-mandatory scroll-px-5 gap-5 overflow-x-auto px-5 pt-2 pb-8 [scrollbar-width:none] sm:-mx-8 sm:scroll-px-8 sm:px-8 xl:-mx-10 xl:scroll-px-10 xl:px-10"
         >
           {visible.map((track) => {
             const active = player.track?.id === track.id
