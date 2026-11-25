@@ -87,3 +87,24 @@ openssl rand -hex 32
 
 - **上傳音檔最大 4 MB**（約 4 分鐘的 MP3）。這是 Vercel 對每次請求的限制。之後可以改成「瀏覽器直接上傳到 Blob」來突破。
 - 免費方案的額度對課堂專題綽綽有餘；如果流量很大，Vercel 後台的 Usage 頁面可以看用量。
+
+## Google Search Console（SEO）
+
+網站已經自動產生 `/sitemap.xml`（網站地圖）和 `/robots.txt`，網址會跟著環境變數 `NEXT_PUBLIC_SITE_URL` 走。
+
+### 第一次登記
+
+1. 確認 Vercel 的 **Settings → Environment Variables** 有 `NEXT_PUBLIC_SITE_URL`，值是網站網址（例如 `https://checkout-asmr.vercel.app`，結尾不要加 `/`）。
+2. 到 [Google Search Console](https://search.google.com/search-console)，**新增資源** → 選右邊的 **網址前置字元**，貼上網站網址。
+3. 驗證方式選 **HTML 標記**，會看到 `<meta name="google-site-verification" content="一串字" />`，只複製 `content="..."` 引號裡那串字。
+4. 到 Vercel 新增環境變數：Key `GOOGLE_SITE_VERIFICATION`、Value 那串字 → 到 **Deployments** 重新部署（Redeploy）。
+5. 部署完成後回到 Search Console 按 **驗證**。
+6. 左側 **Sitemap** → 輸入 `sitemap.xml` → 提交。
+
+### 之後換成自訂網域
+
+1. Vercel 專案 **Settings → Domains** 加入新網域，照畫面設定 DNS。
+2. 在同一頁把 `checkout-asmr.vercel.app` 設成 **Redirect to** 新網域（308/301 永久轉址）。
+3. 把 `NEXT_PUBLIC_SITE_URL` 改成新網址 → 重新部署。
+4. Search Console 新增新網域的資源（這次可以選「網域」並用 DNS 驗證）→ 再提交一次 `sitemap.xml`。
+5. 舊的 vercel.app 資源先留著幾個月，觀察流量是否順利轉到新網域。

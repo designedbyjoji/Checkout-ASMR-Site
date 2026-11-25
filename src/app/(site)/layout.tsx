@@ -3,6 +3,7 @@ import { Header } from '@/app/ui/header'
 import { Footer } from '@/app/ui/footer'
 import { Aurora, HeadphoneGate, RevealObserver, ScrollToTop } from '@/app/ui/site-effects'
 import { PlayerProvider } from '@/app/ui/audio-player'
+import { siteUrl } from '@/lib/site-url'
 import './styles.css'
 
 const title = 'Checkout. — 你的解壓 ASMR 便利店'
@@ -10,7 +11,12 @@ const description =
   '一個收藏、理解與分享 ASMR 的聲音角落。戴上耳機，體驗 3D 聲音、調配你的放鬆配方，聆聽來自世界各地的 ASMR。'
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  metadataBase: new URL(siteUrl),
+  alternates: { canonical: './' }, // 告訴 Google 每頁的「正式網址」，換網域後會跟著換
+  // Google Search Console 驗證碼：在 Vercel 設環境變數 GOOGLE_SITE_VERIFICATION
+  verification: process.env.GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+    : undefined,
   title: { default: title, template: '%s — Checkout.' },
   description,
   applicationName: 'Checkout.',
