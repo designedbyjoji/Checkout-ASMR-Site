@@ -29,9 +29,7 @@ const paths = {
       <path d="m18 6-12 12" />
     </>
   ),
-  heart: (
-    <path d="M19.5 12.6 12 20l-7.5-7.4A4.9 4.9 0 0 1 12 6.1a4.9 4.9 0 0 1 7.5 6.5Z" />
-  ),
+  heart: <path d="M19.5 12.6 12 20l-7.5-7.4A4.9 4.9 0 0 1 12 6.1a4.9 4.9 0 0 1 7.5 6.5Z" />,
   menu: (
     <>
       <path d="M4 8h16" />
@@ -44,7 +42,9 @@ const paths = {
       <path d="M15 5v14" />
     </>
   ),
-  play: <path d="M8 5.5v13a.5.5 0 0 0 .77.42l10.2-6.5a.5.5 0 0 0 0-.84L8.77 5.08A.5.5 0 0 0 8 5.5Z" />,
+  play: (
+    <path d="M8 5.5v13a.5.5 0 0 0 .77.42l10.2-6.5a.5.5 0 0 0 0-.84L8.77 5.08A.5.5 0 0 0 8 5.5Z" />
+  ),
   share: (
     <>
       <path d="M12 15V4" />
@@ -147,8 +147,15 @@ export function ThreadsLogo({ className = 'size-6' }: { className?: string }) {
   )
 }
 
-export function CheckoutLogo({ className = '', size = 'md' }: { className?: string; size?: 'md' | 'lg' }) {
-  const height = size === 'lg' ? 'h-11 sm:h-12' : 'h-8 sm:h-9'
+export function CheckoutLogo({
+  className = '',
+  size = 'md',
+}: {
+  className?: string
+  /** xs：聲音卡片角落的小 Logo · md：Header · lg：Footer、沒有封面時的預設封面 */
+  size?: 'xs' | 'md' | 'lg'
+}) {
+  const height = size === 'lg' ? 'h-11 sm:h-12' : size === 'xs' ? 'h-3.5' : 'h-8 sm:h-9'
   const ratio = logo.width && logo.height ? logo.width / logo.height : 74 / 58
 
   return (
@@ -209,7 +216,10 @@ export function SectionHeading({
         {title}
       </h2>
       {lead && (
-        <p className="mt-6 max-w-2xl text-base leading-8 text-[#e6efeea6] sm:text-lg" style={{ fontWeight: weight.lead }}>
+        <p
+          className="mt-6 max-w-2xl text-base leading-8 text-[#e6efeea6] sm:text-lg"
+          style={{ fontWeight: weight.lead }}
+        >
           {lead}
         </p>
       )}
@@ -253,11 +263,24 @@ export function PageIntro({
   return (
     <header className="relative px-5 pt-36 pb-6 sm:px-8 sm:pt-44 lg:pt-52">
       <div className="mx-auto max-w-7xl">
-        <p className="reveal font-serif text-xl text-[#6ff5c8e6] italic sm:text-2xl" style={{ fontWeight: weight.en }}>{en}</p>
-        <h1 className="reveal mt-3 text-[clamp(2.8rem,9vw,6rem)] leading-[1.05] tracking-[0.04em]" style={{ fontWeight: weight.title }}>
+        <p
+          className="reveal font-serif text-xl text-[#6ff5c8e6] italic sm:text-2xl"
+          style={{ fontWeight: weight.en }}
+        >
+          {en}
+        </p>
+        <h1
+          className="reveal mt-3 text-[clamp(2.8rem,9vw,6rem)] leading-[1.05] tracking-[0.04em]"
+          style={{ fontWeight: weight.title }}
+        >
           {title}
         </h1>
-        <p className="reveal mt-8 max-w-2xl text-base leading-8 text-[#e6efeea6] sm:text-lg" style={{ fontWeight: weight.lead }}>{lead}</p>
+        <p
+          className="reveal mt-8 max-w-2xl text-base leading-8 text-[#e6efeea6] sm:text-lg"
+          style={{ fontWeight: weight.lead }}
+        >
+          {lead}
+        </p>
       </div>
     </header>
   )
@@ -293,10 +316,16 @@ export function Subpage({ href, children }: { href: string; children: React.Reac
         <nav aria-label="上一頁／下一頁" className="relative px-5 pb-20 sm:px-8 lg:pb-28">
           <div className="mx-auto flex max-w-7xl flex-col gap-3 border-t border-[#ffffff1a] pt-8 sm:flex-row sm:justify-between">
             {prev ? (
-              <Link href={prev.href} className="group flex flex-col gap-1 text-[#e6efeeb2] transition-colors hover:text-[#6ff5c8]">
+              <Link
+                href={prev.href}
+                className="group flex flex-col gap-1 text-[#e6efeeb2] transition-colors hover:text-[#6ff5c8]"
+              >
                 <span className="text-xs font-[400] tracking-[0.3em] text-[#e6efee73]">上一頁</span>
                 <span className="inline-flex items-center gap-2 text-lg font-[600] tracking-[0.1em]">
-                  <Icon name="arrow" className="size-4 rotate-180 transition-transform duration-500 group-hover:-translate-x-1" />
+                  <Icon
+                    name="arrow"
+                    className="size-4 rotate-180 transition-transform duration-500 group-hover:-translate-x-1"
+                  />
                   {prev.label}
                 </span>
               </Link>
@@ -311,7 +340,10 @@ export function Subpage({ href, children }: { href: string; children: React.Reac
                 <span className="text-xs font-[400] tracking-[0.3em] text-[#e6efee73]">下一頁</span>
                 <span className="inline-flex items-center gap-2 text-lg font-[600] tracking-[0.1em]">
                   {next.label}
-                  <Icon name="arrow" className="size-4 transition-transform duration-500 group-hover:translate-x-1" />
+                  <Icon
+                    name="arrow"
+                    className="size-4 transition-transform duration-500 group-hover:translate-x-1"
+                  />
                 </span>
               </Link>
             )}
@@ -325,7 +357,13 @@ export function Subpage({ href, children }: { href: string; children: React.Reac
 // ─────────────── 播放中的小波形 MiniWave ───────────────
 
 /** 小小的聲波動畫（播放中會跳動） */
-export function MiniWave({ active, className = 'text-[#6ff5c8b2]' }: { active: boolean; className?: string }) {
+export function MiniWave({
+  active,
+  className = 'text-[#6ff5c8b2]',
+}: {
+  active: boolean
+  className?: string
+}) {
   const bars = [40, 70, 45, 90, 55, 80, 35, 65, 50, 75, 40, 60]
   return (
     <span className={`flex h-6 items-center gap-[3px] ${className}`} aria-hidden="true">

@@ -72,6 +72,7 @@ export interface Config {
     folders: Folder;
     tags: Tag;
     'asmr-tracks': AsmrTrack;
+    'asmr-covers': AsmrCover;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -85,6 +86,7 @@ export interface Config {
     folders: FoldersSelect<false> | FoldersSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
     'asmr-tracks': AsmrTracksSelect<false> | AsmrTracksSelect<true>;
+    'asmr-covers': AsmrCoversSelect<false> | AsmrCoversSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -255,10 +257,50 @@ export interface AsmrTrack {
   title: string;
   creatorName: string;
   category: 'tapping' | 'whisper' | 'nature' | 'roleplay' | 'texture';
+  cover?: (number | null) | AsmrCover;
   origin?: string | null;
   description?: string | null;
   status: 'pending' | 'approved' | 'rejected';
   featured?: boolean | null;
+  prefix?: string | null;
+  _objectKey?: string | null;
+  createdBy?: {
+    relationTo: 'admins';
+    value: number | Admin;
+  } | null;
+  updatedBy?: {
+    relationTo: 'admins';
+    value: number | Admin;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  original?: {
+    filename?: string | null;
+    url?: string | null;
+    mimeType?: string | null;
+    filesize?: number | null;
+    width?: number | null;
+    height?: number | null;
+    prefix?: string | null;
+    _objectKey?: string | null;
+  };
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "asmr-covers".
+ */
+export interface AsmrCover {
+  id: number;
+  visible?: boolean | null;
   prefix?: string | null;
   _objectKey?: string | null;
   createdBy?: {
@@ -334,6 +376,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'asmr-tracks';
         value: number | AsmrTrack;
+      } | null)
+    | ({
+        relationTo: 'asmr-covers';
+        value: number | AsmrCover;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -496,10 +542,45 @@ export interface AsmrTracksSelect<T extends boolean = true> {
   title?: T;
   creatorName?: T;
   category?: T;
+  cover?: T;
   origin?: T;
   description?: T;
   status?: T;
   featured?: T;
+  prefix?: T;
+  _objectKey?: T;
+  createdBy?: T;
+  updatedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  original?:
+    | T
+    | {
+        filename?: T;
+        url?: T;
+        mimeType?: T;
+        filesize?: T;
+        width?: T;
+        height?: T;
+        prefix?: T;
+        _objectKey?: T;
+      };
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "asmr-covers_select".
+ */
+export interface AsmrCoversSelect<T extends boolean = true> {
+  visible?: T;
   prefix?: T;
   _objectKey?: T;
   createdBy?: T;
@@ -611,7 +692,7 @@ export interface CollectionsWidget {
 export interface CollectionQueryWidget {
   data?: {
     title?: string | null;
-    relatedCollection: 'admins' | 'media' | 'folders' | 'tags' | 'asmr-tracks';
+    relatedCollection: 'admins' | 'media' | 'folders' | 'tags' | 'asmr-tracks' | 'asmr-covers';
     where?:
       | {
           [k: string]: unknown;
@@ -633,7 +714,7 @@ export interface CollectionQueryWidget {
  */
 export interface ActivityWidget {
   data?: {
-    excludedCollections?: ('admins' | 'media' | 'folders' | 'tags' | 'asmr-tracks')[] | null;
+    excludedCollections?: ('admins' | 'media' | 'folders' | 'tags' | 'asmr-tracks' | 'asmr-covers')[] | null;
   };
   width: 'small' | 'medium' | 'large' | 'x-large' | 'full';
 }
@@ -643,7 +724,7 @@ export interface ActivityWidget {
  */
 export interface UploadDropzoneWidget {
   data?: {
-    excludedCollections?: ('media' | 'asmr-tracks')[] | null;
+    excludedCollections?: ('media' | 'asmr-tracks' | 'asmr-covers')[] | null;
   };
   width: 'x-small' | 'small' | 'medium' | 'large' | 'x-large' | 'full';
 }

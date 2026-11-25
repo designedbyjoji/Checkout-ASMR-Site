@@ -26,7 +26,15 @@ export const AsmrTracks: CollectionConfig = {
     defaultColumns: ['title', 'creatorName', 'category', 'origin', 'status', 'createdAt'],
   },
   upload: {
-    mimeTypes: ['audio/mpeg', 'audio/mp4', 'audio/x-m4a', 'audio/ogg', 'audio/wav', 'audio/x-wav', 'audio/webm'],
+    mimeTypes: [
+      'audio/mpeg',
+      'audio/mp4',
+      'audio/x-m4a',
+      'audio/ogg',
+      'audio/wav',
+      'audio/x-wav',
+      'audio/webm',
+    ],
   },
   hooks: {
     beforeValidate: [
@@ -46,7 +54,18 @@ export const AsmrTracks: CollectionConfig = {
       },
     ],
     afterChange: [
-      ({ req }) => {
+      async ({ doc, req }) => {
+        // 封面跟著聲音的審核狀態：通過 → 公開；待審／退回 → 隱藏
+        const coverId = typeof doc.cover === 'object' && doc.cover ? doc.cover.id : doc.cover
+        if (coverId) {
+          await req.payload.update({
+            collection: 'asmr-covers',
+            id: coverId,
+            data: { visible: doc.status === 'approved' },
+            overrideAccess: true,
+            req,
+          })
+        }
         if (!req.context.skipAsmrRevalidation) {
           revalidateTag('asmr-tracks', 'max')
         }
@@ -87,7 +106,14 @@ export const AsmrTracks: CollectionConfig = {
       ],
     },
     {
-      // 新增：錄製地點（例如「台灣・台北」），讓資料庫可以呈現「來自世界各地」
+      // 封面照片（選填；投稿者上傳，跟聲音一起審核）。沒有封面時網站顯示 Checkout. Logo
+      name: 'cover',
+      type: 'upload',
+      relationTo: 'asmr-covers',
+      label: 'Cover image',
+    },
+    {
+      // 錄製地點（目前網站上不顯示，保留舊資料）（例如「台灣・台北」），讓資料庫可以呈現「來自世界各地」
       name: 'origin',
       type: 'text',
       label: 'Recorded in',

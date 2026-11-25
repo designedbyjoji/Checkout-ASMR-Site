@@ -19,6 +19,8 @@ export type Track = {
   origin: string
   description: string
   url: string
+  /** 封面圖片網址；空字串 = 沒有封面，顯示 Checkout. Logo */
+  cover: string
 }
 
 /* ---------------------------------------------------------------

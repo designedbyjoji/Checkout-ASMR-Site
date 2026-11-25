@@ -10,6 +10,7 @@ import { Media } from './collections/Media'
 import { Folders } from './collections/Folders'
 import { Tags } from './collections/Tags'
 import { AsmrTracks } from './collections/AsmrTracks'
+import { AsmrCovers } from './collections/AsmrCovers'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -51,7 +52,7 @@ export default buildConfig({
     fallbackLanguage: 'en',
     supportedLanguages: { en: adminLanguage },
   },
-  collections: [Admins, Media, Folders, Tags, AsmrTracks],
+  collections: [Admins, Media, Folders, Tags, AsmrTracks, AsmrCovers],
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
@@ -67,6 +68,7 @@ export default buildConfig({
       token: blobToken,
       collections: {
         'asmr-tracks': true,
+        'asmr-covers': true,
         media: true,
       },
     }),

@@ -10,7 +10,7 @@ export const getApprovedTracks = unstable_cache(
     const result = await payload.find({
       collection: 'asmr-tracks',
       overrideAccess: false,
-      depth: 0,
+      depth: 1,
       limit: 60,
       sort: '-featured,-createdAt',
     })
@@ -25,8 +25,11 @@ export const getApprovedTracks = unstable_cache(
         origin: track.origin ?? '',
         description: track.description ?? '',
         url: track.url ?? '',
+        // 封面要「已公開」才讀得到；讀不到就是空字串 → 網站改顯示 Checkout. Logo
+        cover:
+          typeof track.cover === 'object' && track.cover?.visible ? (track.cover.url ?? '') : '',
       }))
   },
-  ['approved-asmr-tracks-v3'],
+  ['approved-asmr-tracks-v4'],
   { tags: ['asmr-tracks'] },
 )
